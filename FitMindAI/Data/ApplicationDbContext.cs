@@ -63,6 +63,11 @@ public class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Member>()
             .HasIndex(m => m.UserId)
             .IsUnique();
+        
+        // Appointment - AppointmentStatus enum to string conversion
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.Status)
+            .HasConversion<string>();
     }
 }
 

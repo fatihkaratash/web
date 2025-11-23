@@ -11,10 +11,9 @@ public static class DbInitializer
         var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
         var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
-        // Database'i oluştur (yoksa)
         await context.Database.MigrateAsync();
 
-        // Rolleri oluştur
+        // rolleri oluştur
         string[] roleNames = { "Admin", "Member" };
         foreach (var roleName in roleNames)
         {
@@ -24,7 +23,7 @@ public static class DbInitializer
             }
         }
 
-        // Admin kullanıcısını oluştur
+        // admin kullanıcı
         var adminEmail = "ogrencinumarasi@sakarya.edu.tr";
         var adminPassword = "sau";
 

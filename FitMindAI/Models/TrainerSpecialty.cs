@@ -1,10 +1,6 @@
 namespace FitMindAI.Models;
 
-/// <summary>
-/// Antrenör-Uzmanlık ilişkisi (Many-to-Many junction table)
-/// Bir antrenörün birden fazla uzmanlığı olabilir
-/// Bir uzmanlık alanında birden fazla antrenör olabilir
-/// </summary>
+// many-to-many bağlantı tablosu
 public class TrainerSpecialty
 {
     public int TrainerId { get; set; }
