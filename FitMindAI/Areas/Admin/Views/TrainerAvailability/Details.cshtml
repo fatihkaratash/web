@@ -1,0 +1,36 @@
+@model FitMindAI.Models.TrainerAvailability
+@{
+    ViewData["Title"] = "Müsaitlik Detayları";
+    string GetDayName(int day) => day switch
+    {
+        0 => "Pazar", 1 => "Pazartesi", 2 => "Salı", 3 => "Çarşamba",
+        4 => "Perşembe", 5 => "Cuma", 6 => "Cumartesi", _ => ""
+    };
+}
+
+<div class="container mt-4">
+    <h2>Müsaitlik Detayları</h2>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-3">Antrenör</dt>
+        <dd class="col-sm-9">@Model.Trainer.FullName</dd>
+
+        <dt class="col-sm-3">Salon</dt>
+        <dd class="col-sm-9">@Model.Trainer.Gym.Name</dd>
+
+        <dt class="col-sm-3">Gün</dt>
+        <dd class="col-sm-9">@GetDayName(Model.DayOfWeek)</dd>
+
+        <dt class="col-sm-3">Başlangıç Saati</dt>
+        <dd class="col-sm-9">@Model.StartTime.ToString("HH:mm")</dd>
+
+        <dt class="col-sm-3">Bitiş Saati</dt>
+        <dd class="col-sm-9">@Model.EndTime.ToString("HH:mm")</dd>
+    </dl>
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+@{
+    ViewData["Title"] = "Randevu Onayı";
+    var trainer = ViewBag.Trainer as FitMindAI.Models.Trainer;
+    var service = ViewBag.Service as FitMindAI.Models.ServiceType;
+    var startDateTime = ViewBag.StartDateTime as DateTime?;
+    var endDateTime = ViewBag.EndDateTime as DateTime?;
+}
+
+<div class="container mt-4">
+    <h2>Randevu Onayı</h2>
+    <hr />
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Randevu Detayları</h4>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <h5>Antrenör Bilgileri</h5>
+                    <p class="mb-1"><strong>Ad Soyad:</strong> @trainer.FullName</p>
+                    <p class="mb-0"><strong>Salon:</strong> @trainer.Gym.Name</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Servis Bilgileri</h5>
+                    <p class="mb-1"><strong>Servis:</strong> @service.Name</p>
+                    <p class="mb-1"><strong>Açıklama:</strong> @service.Description</p>
+                    <p class="mb-1"><strong>Süre:</strong> @service.DurationInMinutes dakika</p>
+                    <p class="mb-0"><strong>Fiyat:</strong> @service.Price.ToString("C2")</p>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-12">
+                    <h5>Tarih ve Saat</h5>
+                    <p class="mb-1"><strong>Tarih:</strong> @startDateTime?.ToString("dd.MM.yyyy dddd")</p>
+                    <p class="mb-1"><strong>Başlangıç:</strong> @startDateTime?.ToString("HH:mm")</p>
+                    <p class="mb-0"><strong>Bitiş:</strong> @endDateTime?.ToString("HH:mm")</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="alert alert-warning mb-3">
+                <strong>Önemli:</strong> Randevunuz oluşturulduktan sonra antrenör tarafından onaylanması gerekmektedir. 
+                Randevu durumunuzu "Randevularım" sayfasından takip edebilirsiniz.
+            </div>
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="trainerId" value="@trainer.Id" />
+                <input type="hidden" name="serviceTypeId" value="@service.Id" />
+                <input type="hidden" name="startDateTime" value="@startDateTime?.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                
+                <div class="d-flex gap-2">
+                    <a asp-action="SelectDateTime" 
+                       asp-route-trainerId="@trainer.Id" 
+                       asp-route-serviceTypeId="@service.Id" 
+                       class="btn btn-secondary">Geri</a>
+                    <button type="submit" class="btn btn-success">Onayla ve Randevu Oluştur</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

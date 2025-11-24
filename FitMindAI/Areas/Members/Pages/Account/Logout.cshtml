@@ -1,0 +1,25 @@
+@page
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+@{
+    if (SignInManager.IsSignedIn(User))
+    {
+        await SignInManager.SignOutAsync();
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="10;url=@Url.Content("~/")" />
+</head>
+<body>
+    <header>
+        <h1>Çıkış Yap</h1>
+        <p>Başarıyla çıkış yaptınız.</p>
+        <p>Ana sayfaya yönlendiriliyorsunuz...</p>
+        <a asp-area="" asp-controller="Home" asp-action="Index">Buraya tıklayın</a> hemen gitmek için.
+    </header>
+</body>
+</html>

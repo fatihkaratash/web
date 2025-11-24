@@ -1,0 +1,41 @@
+@model IEnumerable<FitMindAI.Models.ServiceType>
+@{
+    ViewData["Title"] = "Servis Seçin";
+    var trainer = ViewBag.Trainer as FitMindAI.Models.Trainer;
+}
+
+<div class="container mt-4">
+    <h2>Servis Seçin</h2>
+    <hr />
+
+    <div class="alert alert-info">
+        <strong>Antrenör:</strong> @trainer.FullName<br />
+        <strong>Salon:</strong> @trainer.Gym.Name
+    </div>
+
+    <form asp-action="SelectDateTime" method="get">
+        <input type="hidden" name="trainerId" value="@trainer.Id" />
+        
+        <div class="list-group mb-4">
+            @foreach (var service in Model)
+            {
+                <label class="list-group-item list-group-item-action">
+                    <input type="radio" name="serviceTypeId" value="@service.Id" required class="form-check-input me-2" />
+                    <div>
+                        <h5 class="mb-1">@service.Name</h5>
+                        <p class="mb-1 text-muted">@service.Description</p>
+                        <small>
+                            <strong>Süre:</strong> @service.DurationInMinutes dakika | 
+                            <strong>Fiyat:</strong> @service.Price.ToString("C2")
+                        </small>
+                    </div>
+                </label>
+            }
+        </div>
+
+        <div class="d-flex gap-2">
+            <a asp-action="SelectTrainer" class="btn btn-secondary">Geri</a>
+            <button type="submit" class="btn btn-primary">İleri</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,35 @@
+@model FitMindAI.Models.TrainerAvailability
+@{
+    ViewData["Title"] = "Müsaitlik Sil";
+    string GetDayName(int day) => day switch
+    {
+        0 => "Pazar", 1 => "Pazartesi", 2 => "Salı", 3 => "Çarşamba",
+        4 => "Perşembe", 5 => "Cuma", 6 => "Cumartesi", _ => ""
+    };
+}
+
+<div class="container mt-4">
+    <h2>Müsaitlik Sil</h2>
+    <hr />
+
+    <div class="alert alert-warning">
+        <h5>Bu müsaitliği silmek istediğinizden emin misiniz?</h5>
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">Antrenör</dt>
+        <dd class="col-sm-9">@Model.Trainer.FullName</dd>
+
+        <dt class="col-sm-3">Gün</dt>
+        <dd class="col-sm-9">@GetDayName(Model.DayOfWeek)</dd>
+
+        <dt class="col-sm-3">Saat Aralığı</dt>
+        <dd class="col-sm-9">@Model.StartTime.ToString("HH:mm") - @Model.EndTime.ToString("HH:mm")</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Sil</button>
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </form>
+</div>

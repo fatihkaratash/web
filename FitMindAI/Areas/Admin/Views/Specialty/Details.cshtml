@@ -1,0 +1,30 @@
+@model FitMindAI.Models.Specialty
+@{
+    ViewData["Title"] = "Uzmanlık Detayları";
+}
+
+<div class="container mt-4">
+    <h2>Uzmanlık Detayları</h2>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Name)</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+    </dl>
+
+    @if (Model.TrainerSpecialties.Any())
+    {
+        <h4 class="mt-4">Bu Uzmanlığa Sahip Antrenörler (@Model.TrainerSpecialties.Count)</h4>
+        <ul class="list-group">
+            @foreach (var ts in Model.TrainerSpecialties)
+            {
+                <li class="list-group-item">@ts.Trainer.FullName</li>
+            }
+        </ul>
+    }
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+</div>

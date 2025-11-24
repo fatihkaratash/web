@@ -1,0 +1,58 @@
+@model IEnumerable<FitMindAI.Models.Trainer>
+@{
+    ViewData["Title"] = "Antrenör Seçin";
+}
+
+<div class="container mt-4">
+    <h2>Antrenör Seçin</h2>
+    <hr />
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="get" asp-action="SelectTrainer">
+                <div class="input-group">
+                    <select name="gymId" class="form-select" asp-items="ViewBag.Gyms">
+                        <option value="">Tüm Salonlar</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Filtrele</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            Seçili kriterlere uygun antrenör bulunamadı.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var trainer in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@trainer.FullName</h5>
+                            <p class="card-text">
+                                <strong>Salon:</strong> @trainer.Gym.Name<br />
+                                @if (!string.IsNullOrEmpty(trainer.Bio))
+                                {
+                                    <strong>Biyografi:</strong> @trainer.Bio<br />
+                                }
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="SelectService" asp-route-trainerId="@trainer.Id" class="btn btn-primary w-100">Seç</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="mt-3">
+        <a asp-action="MyAppointments" class="btn btn-secondary">Randevularıma Dön</a>
+    </div>
+</div>

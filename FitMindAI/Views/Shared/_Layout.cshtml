@@ -26,19 +26,29 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">Hakkımızda</a>
                         </li>
-                        @if (User.IsInRole("Member"))
+                        @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Appointment" asp-action="Index">Randevularım</a>
+                                <a class="nav-link" asp-controller="Appointment" asp-action="SelectTrainer">Randevu Al</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Appointment" asp-action="Book">Randevu Al</a>
+                                <a class="nav-link" asp-controller="Appointment" asp-action="MyAppointments">Randevularım</a>
                             </li>
                         }
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Panel</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                                    Admin Paneli
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Gym" asp-action="Index">Salonlar</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="ServiceType" asp-action="Index">Hizmetler</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Specialty" asp-action="Index">Uzmanlıklar</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Trainer" asp-action="Index">Antrenörler</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="TrainerAvailability" asp-action="Index">Müsaitlik Takvimi</a></li>
+                                </ul>
                             </li>
                         }
                     </ul>
