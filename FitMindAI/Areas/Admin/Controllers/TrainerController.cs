@@ -19,11 +19,18 @@ public class TrainerController : Controller
     }
 
     // GET: Admin/Trainer
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int? gymId)
     {
-        var trainers = await _context.Trainers
-            .Include(t => t.Gym)
-            .ToListAsync();
+        var query = _context.Trainers.Include(t => t.Gym).AsQueryable();
+        
+        if (gymId.HasValue)
+        {
+            query = query.Where(t => t.GymId == gymId.Value);
+            var gym = await _context.Gyms.FindAsync(gymId.Value);
+            ViewBag.GymFilter = gym?.Name;
+        }
+        
+        var trainers = await query.OrderBy(t => t.FullName).ToListAsync();
         return View(trainers);
     }
 

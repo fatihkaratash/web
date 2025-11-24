@@ -1,4 +1,4 @@
-@model IEnumerable<FitMindAI.Models.Trainer>
+@model IEnumerable<FitMindAI.ViewModels.Trainer.TrainerListItemViewModel>
 @{
     ViewData["Title"] = "Antrenör Seçin";
 }
@@ -36,11 +36,16 @@
                         <div class="card-body">
                             <h5 class="card-title">@trainer.FullName</h5>
                             <p class="card-text">
-                                <strong>Salon:</strong> @trainer.Gym.Name<br />
+                                <strong>Salon:</strong> @trainer.GymName<br />
+                                @if (!string.IsNullOrEmpty(trainer.Specialties))
+                                {
+                                    <strong>Uzmanlık:</strong> @trainer.Specialties<br />
+                                }
                                 @if (!string.IsNullOrEmpty(trainer.Bio))
                                 {
                                     <strong>Biyografi:</strong> @trainer.Bio<br />
                                 }
+                                <small class="text-muted">@trainer.ServiceCount hizmet sunuyor</small>
                             </p>
                         </div>
                         <div class="card-footer">

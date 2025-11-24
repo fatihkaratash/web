@@ -1,4 +1,4 @@
-@model IEnumerable<FitMindAI.Models.Appointment>
+@model IEnumerable<FitMindAI.ViewModels.Appointment.AppointmentListItemViewModel>
 @{
     ViewData["Title"] = "Randevularım";
 }
@@ -52,40 +52,20 @@
                     @foreach (var appointment in Model.OrderByDescending(a => a.StartDateTime))
                     {
                         var isPast = appointment.StartDateTime < DateTime.Now;
-                        var canCancel = !isPast && 
-                                       (appointment.Status == FitMindAI.Models.AppointmentStatus.Pending || 
-                                        appointment.Status == FitMindAI.Models.AppointmentStatus.Approved);
                         
                         <tr class="@(isPast ? "table-secondary" : "")">
                             <td>@appointment.StartDateTime.ToString("dd.MM.yyyy")</td>
-                            <td>@appointment.StartDateTime.ToString("HH:mm") - @appointment.StartDateTime.AddMinutes(appointment.ServiceType.DurationInMinutes).ToString("HH:mm")</td>
-                            <td>@appointment.Trainer.FullName</td>
-                            <td>@appointment.Trainer.Gym.Name</td>
-                            <td>@appointment.ServiceType.Name</td>
-                            <td>@appointment.ServiceType.DurationInMinutes dk</td>
+                            <td>@appointment.StartDateTime.ToString("HH:mm") - @appointment.EndDateTime.ToString("HH:mm")</td>
+                            <td>@appointment.TrainerName</td>
+                            <td>@appointment.GymName</td>
+                            <td>@appointment.ServiceName</td>
+                            <td>@appointment.ServiceDuration dk</td>
                             <td>@appointment.TotalPrice.ToString("C2")</td>
                             <td>
-                                @switch (appointment.Status)
-                                {
-                                    case FitMindAI.Models.AppointmentStatus.Pending:
-                                        <span class="badge bg-warning text-dark">Onay Bekliyor</span>
-                                        break;
-                                    case FitMindAI.Models.AppointmentStatus.Approved:
-                                        <span class="badge bg-success">Onaylandı</span>
-                                        break;
-                                    case FitMindAI.Models.AppointmentStatus.Rejected:
-                                        <span class="badge bg-danger">Reddedildi</span>
-                                        break;
-                                    case FitMindAI.Models.AppointmentStatus.Canceled:
-                                        <span class="badge bg-secondary">İptal Edildi</span>
-                                        break;
-                                    case FitMindAI.Models.AppointmentStatus.Completed:
-                                        <span class="badge bg-info">Tamamlandı</span>
-                                        break;
-                                }
+                                <span class="badge bg-@appointment.StatusBadgeClass">@appointment.StatusText</span>
                             </td>
                             <td>
-                                @if (canCancel)
+                                @if (appointment.CanBeCanceled)
                                 {
                                     <form asp-action="Cancel" asp-route-id="@appointment.Id" method="post" style="display:inline;">
                                         @Html.AntiForgeryToken()

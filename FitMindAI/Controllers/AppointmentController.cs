@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using FitMindAI.Services;
 using FitMindAI.Data;
 using Microsoft.EntityFrameworkCore;
+using FitMindAI.Extensions;
+using FitMindAI.ViewModels.Trainer;
 
 namespace FitMindAI.Controllers
 {
@@ -35,10 +37,11 @@ namespace FitMindAI.Controllers
             ViewBag.Gyms = new SelectList(gyms, "Id", "Name", gymId);
             ViewBag.SelectedGymId = gymId;
 
-            // Antrenörleri getir
+            // Antrenörleri getir ve ViewModel'e çevir
             var trainers = await _appointmentService.GetActiveTrainersAsync(gymId);
+            var viewModels = trainers.ToListItemViewModels();
             
-            return View(trainers);
+            return View(viewModels);
         }
 
         // GET: Appointment/SelectService?trainerId=X
@@ -54,8 +57,6 @@ namespace FitMindAI.Controllers
                 return NotFound();
             }
 
-            ViewBag.Trainer = trainer;
-
             // Antrenörün sunduğu servisleri getir
             var services = await _appointmentService.GetServicesForTrainerAsync(trainerId);
             
@@ -65,7 +66,10 @@ namespace FitMindAI.Controllers
                 return RedirectToAction(nameof(SelectTrainer));
             }
 
-            return View(services);
+            // ViewModel oluştur
+            var viewModel = trainer.ToServiceSelectionViewModel(services);
+
+            return View(viewModel);
         }
 
         // GET: Appointment/SelectDateTime?trainerId=X&serviceTypeId=Y
@@ -133,12 +137,25 @@ namespace FitMindAI.Controllers
                 return RedirectToAction(nameof(SelectDateTime), new { trainerId, serviceTypeId });
             }
 
-            ViewBag.Trainer = trainer;
-            ViewBag.Service = service;
-            ViewBag.StartDateTime = startDateTime;
-            ViewBag.EndDateTime = startDateTime.AddMinutes(service.DurationInMinutes);
+            // ViewModel oluştur
+            var viewModel = new ViewModels.Appointment.AppointmentDetailsViewModel
+            {
+                TrainerId = trainer.Id,
+                TrainerName = trainer.FullName,
+                TrainerBio = trainer.Bio,
+                GymId = trainer.GymId,
+                GymName = trainer.Gym?.Name ?? "Bilinmiyor",
+                GymAddress = trainer.Gym?.Address ?? string.Empty,
+                ServiceTypeId = service.Id,
+                ServiceName = service.Name,
+                ServiceDescription = service.Description,
+                ServiceDuration = service.DurationInMinutes,
+                StartDateTime = startDateTime,
+                EndDateTime = startDateTime.AddMinutes(service.DurationInMinutes),
+                TotalPrice = service.Price
+            };
 
-            return View();
+            return View(viewModel);
         }
 
         // POST: Appointment/Create
@@ -185,7 +202,10 @@ namespace FitMindAI.Controllers
 
             var appointments = await _appointmentService.GetMemberAppointmentsAsync(user.Id);
             
-            return View(appointments);
+            // Entity'leri ViewModel'e çevir
+            var viewModels = appointments.ToListItemViewModels();
+            
+            return View(viewModels);
         }
 
         // POST: Appointment/Cancel/5

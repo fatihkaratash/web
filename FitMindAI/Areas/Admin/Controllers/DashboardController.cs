@@ -71,6 +71,17 @@ namespace FitMindAI.Areas.Admin.Controllers
                 .Take(5)
                 .ToListAsync();
 
+            // Salon kartları için veri
+            var gyms = await _context.Gyms
+                .Select(g => new
+                {
+                    Gym = g,
+                    TrainerCount = _context.Trainers.Count(t => t.GymId == g.Id && t.IsActive),
+                    TotalTrainers = _context.Trainers.Count(t => t.GymId == g.Id),
+                    AppointmentCount = _context.Appointments.Count(a => a.Trainer.GymId == g.Id)
+                })
+                .ToListAsync();
+
             // ViewBag ile view'a gönder
             ViewBag.TotalMembers = totalMembers;
             ViewBag.TotalAppointments = totalAppointments;
@@ -80,6 +91,7 @@ namespace FitMindAI.Areas.Admin.Controllers
             ViewBag.MostPopularService = mostPopularService;
             ViewBag.TopTrainer = topTrainer;
             ViewBag.RecentAppointments = recentAppointments;
+            ViewBag.Gyms = gyms;
 
             return View();
         }

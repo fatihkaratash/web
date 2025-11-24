@@ -1,9 +1,6 @@
+@model FitMindAI.ViewModels.Appointment.AppointmentDetailsViewModel
 @{
     ViewData["Title"] = "Randevu Onayı";
-    var trainer = ViewBag.Trainer as FitMindAI.Models.Trainer;
-    var service = ViewBag.Service as FitMindAI.Models.ServiceType;
-    var startDateTime = ViewBag.StartDateTime as DateTime?;
-    var endDateTime = ViewBag.EndDateTime as DateTime?;
 }
 
 <div class="container mt-4">
@@ -18,15 +15,22 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <h5>Antrenör Bilgileri</h5>
-                    <p class="mb-1"><strong>Ad Soyad:</strong> @trainer.FullName</p>
-                    <p class="mb-0"><strong>Salon:</strong> @trainer.Gym.Name</p>
+                    <p class="mb-1"><strong>Ad Soyad:</strong> @Model.TrainerName</p>
+                    <p class="mb-1"><strong>Salon:</strong> @Model.GymName</p>
+                    @if (!string.IsNullOrEmpty(Model.GymAddress))
+                    {
+                        <p class="mb-0"><strong>Adres:</strong> @Model.GymAddress</p>
+                    }
                 </div>
                 <div class="col-md-6">
                     <h5>Servis Bilgileri</h5>
-                    <p class="mb-1"><strong>Servis:</strong> @service.Name</p>
-                    <p class="mb-1"><strong>Açıklama:</strong> @service.Description</p>
-                    <p class="mb-1"><strong>Süre:</strong> @service.DurationInMinutes dakika</p>
-                    <p class="mb-0"><strong>Fiyat:</strong> @service.Price.ToString("C2")</p>
+                    <p class="mb-1"><strong>Servis:</strong> @Model.ServiceName</p>
+                    @if (!string.IsNullOrEmpty(Model.ServiceDescription))
+                    {
+                        <p class="mb-1"><strong>Açıklama:</strong> @Model.ServiceDescription</p>
+                    }
+                    <p class="mb-1"><strong>Süre:</strong> @Model.ServiceDuration dakika</p>
+                    <p class="mb-0"><strong>Fiyat:</strong> @Model.TotalPrice.ToString("C2")</p>
                 </div>
             </div>
 
@@ -35,9 +39,9 @@
             <div class="row">
                 <div class="col-12">
                     <h5>Tarih ve Saat</h5>
-                    <p class="mb-1"><strong>Tarih:</strong> @startDateTime?.ToString("dd.MM.yyyy dddd")</p>
-                    <p class="mb-1"><strong>Başlangıç:</strong> @startDateTime?.ToString("HH:mm")</p>
-                    <p class="mb-0"><strong>Bitiş:</strong> @endDateTime?.ToString("HH:mm")</p>
+                    <p class="mb-1"><strong>Tarih:</strong> @Model.StartDateTime.ToString("dd.MM.yyyy dddd")</p>
+                    <p class="mb-1"><strong>Başlangıç:</strong> @Model.StartDateTime.ToString("HH:mm")</p>
+                    <p class="mb-0"><strong>Bitiş:</strong> @Model.EndDateTime.ToString("HH:mm")</p>
                 </div>
             </div>
         </div>
@@ -49,14 +53,14 @@
 
             <form asp-action="Create" method="post">
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="trainerId" value="@trainer.Id" />
-                <input type="hidden" name="serviceTypeId" value="@service.Id" />
-                <input type="hidden" name="startDateTime" value="@startDateTime?.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                <input type="hidden" name="trainerId" value="@Model.TrainerId" />
+                <input type="hidden" name="serviceTypeId" value="@Model.ServiceTypeId" />
+                <input type="hidden" name="startDateTime" value="@Model.StartDateTime.ToString("yyyy-MM-ddTHH:mm:ss")" />
                 
                 <div class="d-flex gap-2">
                     <a asp-action="SelectDateTime" 
-                       asp-route-trainerId="@trainer.Id" 
-                       asp-route-serviceTypeId="@service.Id" 
+                       asp-route-trainerId="@Model.TrainerId" 
+                       asp-route-serviceTypeId="@Model.ServiceTypeId" 
                        class="btn btn-secondary">Geri</a>
                     <button type="submit" class="btn btn-success">Onayla ve Randevu Oluştur</button>
                 </div>

@@ -216,6 +216,91 @@
         </div>
     </div>
 
+    <!-- Salon Kartları -->
+    <div class="row mb-4">
+        <div class="col-12 mb-3">
+            <h3><i class="bi bi-building"></i> Salonlarım</h3>
+            <p class="text-muted">Salonları yönet, antrenörleri ve müsaitlik takvimini kontrol et</p>
+        </div>
+        
+        @if (ViewBag.Gyms != null && ViewBag.Gyms.Count > 0)
+        {
+            @foreach (var gymData in ViewBag.Gyms)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="card-title mb-1">
+                                        <i class="bi bi-building-fill text-primary"></i>
+                                        @gymData.Gym.Name
+                                    </h5>
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-geo-alt"></i> @gymData.Gym.Address
+                                    </p>
+                                </div>
+                                <span class="badge bg-primary">Aktif</span>
+                            </div>
+
+                            <!-- İstatistikler -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2 text-center">
+                                        <div class="fs-4 fw-bold text-success">@gymData.TrainerCount</div>
+                                        <small class="text-muted">Aktif Antrenör</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2 text-center">
+                                        <div class="fs-4 fw-bold text-info">@gymData.AppointmentCount</div>
+                                        <small class="text-muted">Toplam Randevu</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Çalışma Saatleri -->
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <i class="bi bi-clock"></i>
+                                    @gymData.Gym.OpeningHour.ToString(@"hh\:mm") - @gymData.Gym.ClosingHour.ToString(@"hh\:mm")
+                                </small>
+                            </div>
+
+                            <!-- Aksiyonlar -->
+                            <div class="d-grid gap-2">
+                                <a asp-area="Admin" asp-controller="Trainer" asp-action="Index" asp-route-gymId="@gymData.Gym.Id" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-people"></i> Antrenörleri Gör
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <a asp-area="Admin" asp-controller="Gym" asp-action="Edit" asp-route-id="@gymData.Gym.Id" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i> Düzenle
+                                    </a>
+                                    <a asp-area="Admin" asp-controller="Gym" asp-action="Details" asp-route-id="@gymData.Gym.Id" 
+                                       class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-info-circle"></i> Detay
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    Henüz salon eklenmemiş. 
+                    <a asp-area="Admin" asp-controller="Gym" asp-action="Create" class="alert-link">Yeni salon ekle</a>
+                </div>
+            </div>
+        }
+    </div>
+
     <!-- Son Randevular -->
     <div class="row">
         <div class="col-12">

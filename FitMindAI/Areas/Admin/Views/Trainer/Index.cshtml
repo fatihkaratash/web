@@ -9,6 +9,15 @@
         <a asp-action="Create" class="btn btn-primary">Yeni Antrenör Ekle</a>
     </div>
 
+    @if (ViewBag.GymFilter != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show">
+            <i class="bi bi-funnel"></i> Filtre: <strong>@ViewBag.GymFilter</strong> salonu
+            <a asp-action="Index" class="btn btn-sm btn-outline-secondary ms-2">Tüm Antrenörler</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show">

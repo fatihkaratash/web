@@ -1,7 +1,6 @@
-@model IEnumerable<FitMindAI.Models.ServiceType>
+@model FitMindAI.ViewModels.Trainer.ServiceSelectionViewModel
 @{
     ViewData["Title"] = "Servis Seçin";
-    var trainer = ViewBag.Trainer as FitMindAI.Models.Trainer;
 }
 
 <div class="container mt-4">
@@ -9,21 +8,28 @@
     <hr />
 
     <div class="alert alert-info">
-        <strong>Antrenör:</strong> @trainer.FullName<br />
-        <strong>Salon:</strong> @trainer.Gym.Name
+        <strong>Antrenör:</strong> @Model.TrainerName<br />
+        <strong>Salon:</strong> @Model.GymName
+        @if (!string.IsNullOrEmpty(Model.TrainerBio))
+        {
+            <br /><strong>Biyografi:</strong> @Model.TrainerBio
+        }
     </div>
 
     <form asp-action="SelectDateTime" method="get">
-        <input type="hidden" name="trainerId" value="@trainer.Id" />
+        <input type="hidden" name="trainerId" value="@Model.TrainerId" />
         
         <div class="list-group mb-4">
-            @foreach (var service in Model)
+            @foreach (var service in Model.Services)
             {
                 <label class="list-group-item list-group-item-action">
                     <input type="radio" name="serviceTypeId" value="@service.Id" required class="form-check-input me-2" />
                     <div>
                         <h5 class="mb-1">@service.Name</h5>
-                        <p class="mb-1 text-muted">@service.Description</p>
+                        @if (!string.IsNullOrEmpty(service.Description))
+                        {
+                            <p class="mb-1 text-muted">@service.Description</p>
+                        }
                         <small>
                             <strong>Süre:</strong> @service.DurationInMinutes dakika | 
                             <strong>Fiyat:</strong> @service.Price.ToString("C2")
