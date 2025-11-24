@@ -10,10 +10,10 @@ public class Member
     public IdentityUser User { get; set; } = null!;
     
     public string FullName { get; set; } = string.Empty;
-    public DateTime BirthDate { get; set; }
-    public int HeightCm { get; set; }
-    public decimal WeightKg { get; set; }
-    public string Goal { get; set; } = string.Empty; // hedef
+    public DateTime? BirthDate { get; set; }
+    public int? HeightCm { get; set; }
+    public decimal? WeightKg { get; set; }
+    public string? Goal { get; set; } // hedef
     public string? AvatarUrl { get; set; }
     
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();

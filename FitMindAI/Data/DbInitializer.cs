@@ -24,7 +24,7 @@ public static class DbInitializer
         }
 
         // admin kullanıcı
-        var adminEmail = "ogrencinumarasi@sakarya.edu.tr";
+        var adminEmail = "b211210088@sakarya.edu.tr";
         var adminPassword = "sau";
 
         var adminUser = await userManager.FindByEmailAsync(adminEmail);

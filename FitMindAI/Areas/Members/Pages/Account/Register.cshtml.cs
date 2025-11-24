@@ -33,34 +33,34 @@ namespace FitMindAI.Areas.Members.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new();
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public IList<AuthenticationScheme> ExternalLogins { get; set; } = new List<AuthenticationScheme>();
 
         public class InputModel
         {
             [Required(ErrorMessage = "Ad Soyad alanı zorunludur.")]
             [Display(Name = "Ad Soyad")]
             [StringLength(100)]
-            public string FullName { get; set; }
+            public string FullName { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Email alanı zorunludur.")]
             [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz.")]
             [Display(Name = "Email")]
-            public string Email { get; set; }
+            public string Email { get; set; } = string.Empty;
 
             [Required(ErrorMessage = "Şifre alanı zorunludur.")]
             [StringLength(100, ErrorMessage = "{0} en az {2} ve en fazla {1} karakter uzunluğunda olmalıdır.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Şifre")]
-            public string Password { get; set; }
+            public string Password { get; set; } = string.Empty;
 
             [DataType(DataType.Password)]
             [Display(Name = "Şifre Tekrar")]
             [Compare("Password", ErrorMessage = "Şifre ve şifre tekrar eşleşmiyor.")]
-            public string ConfirmPassword { get; set; }
+            public string ConfirmPassword { get; set; } = string.Empty;
         }
 
         public async Task OnGetAsync(string returnUrl = null)

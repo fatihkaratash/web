@@ -8,10 +8,10 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form method="post">
             <h2>Yeni hesap oluşturun</h2>
             <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
             
             <div class="form-floating mb-3">
                 <input asp-for="Input.FullName" class="form-control" autocomplete="name" aria-required="true" placeholder="Ad Soyad" />
@@ -26,13 +26,13 @@
             </div>
             
             <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre" />
+                <input asp-for="Input.Password" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre" />
                 <label asp-for="Input.Password">Şifre</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             
             <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre Tekrar" />
+                <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre Tekrar" />
                 <label asp-for="Input.ConfirmPassword">Şifre Tekrar</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
