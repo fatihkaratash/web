@@ -17,18 +17,6 @@
         <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Bio)</dt>
         <dd class="col-sm-9">@(Model.Bio ?? "-")</dd>
 
-        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.AvatarUrl)</dt>
-        <dd class="col-sm-9">
-            @if (!string.IsNullOrEmpty(Model.AvatarUrl))
-            {
-                <img src="@Model.AvatarUrl" alt="Avatar" class="img-thumbnail" style="max-width: 150px;" />
-            }
-            else
-            {
-                <span>-</span>
-            }
-        </dd>
-
         <dt class="col-sm-3">@Html.DisplayNameFor(m => m.IsActive)</dt>
         <dd class="col-sm-9">
             @if (Model.IsActive)

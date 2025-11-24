@@ -14,7 +14,6 @@ public class Member
     public int? HeightCm { get; set; }
     public decimal? WeightKg { get; set; }
     public string? Goal { get; set; } // hedef
-    public string? AvatarUrl { get; set; }
     
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     public ICollection<AiRecommendation> AiRecommendations { get; set; } = new List<AiRecommendation>();

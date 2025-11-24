@@ -18,5 +18,6 @@ public class Appointment
     public decimal TotalPrice { get; set; }
     public AppointmentStatus Status { get; set; } = AppointmentStatus.Pending;
     public string? Notes { get; set; }
+    public string? AdminNote { get; set; } // Admin reddetme/onaylama notu
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

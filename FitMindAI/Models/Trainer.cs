@@ -18,14 +18,10 @@ public class Trainer
     [Required(ErrorMessage = "Salon seçimi gereklidir")]
     [Display(Name = "Salon")]
     public int GymId { get; set; }
-    public Gym Gym { get; set; } = null!;
+    public Gym? Gym { get; set; }
     
     [Display(Name = "Aktif mi?")]
     public bool IsActive { get; set; } = true; // aktif mi
-    
-    [Url(ErrorMessage = "Geçerli bir URL giriniz")]
-    [Display(Name = "Avatar URL")]
-    public string? AvatarUrl { get; set; }
     
     public ICollection<TrainerSpecialty> TrainerSpecialties { get; set; } = new List<TrainerSpecialty>();
     public ICollection<TrainerService> TrainerServices { get; set; } = new List<TrainerService>();

@@ -9,6 +9,14 @@
     <h2>Yeni Antrenör Ekle</h2>
     <hr />
 
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="row">
         <div class="col-md-10">
             <form asp-action="Create" method="post">
@@ -32,12 +40,6 @@
                     <label asp-for="Bio" class="form-label"></label>
                     <textarea asp-for="Bio" class="form-control" rows="3"></textarea>
                     <span asp-validation-for="Bio" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="AvatarUrl" class="form-label"></label>
-                    <input asp-for="AvatarUrl" class="form-control" placeholder="https://example.com/avatar.jpg" />
-                    <span asp-validation-for="AvatarUrl" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">

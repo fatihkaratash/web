@@ -1,0 +1,311 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-5 fw-bold">
+                <i class="bi bi-speedometer2"></i> Admin Dashboard
+            </h1>
+            <p class="text-muted">Spor Salonu İstatistikleri ve Genel Bakış</p>
+        </div>
+    </div>
+
+    <!-- İstatistik Kartları -->
+    <div class="row g-4 mb-4">
+        <!-- Toplam Üyeler -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-people-fill text-primary fs-1"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Toplam Üye</h6>
+                            <h2 class="mb-0 fw-bold">@ViewBag.TotalMembers</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toplam Randevular -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-calendar-check-fill text-success fs-1"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Toplam Randevu</h6>
+                            <h2 class="mb-0 fw-bold">@ViewBag.TotalAppointments</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bugünkü Randevular -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-calendar-event-fill text-info fs-1"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Bugünkü Randevular</h6>
+                            <h2 class="mb-0 fw-bold">@ViewBag.TodayAppointments</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bekleyen Randevular -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                <i class="bi bi-hourglass-split text-warning fs-1"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Bekleyen Randevular</h6>
+                            <h2 class="mb-0 fw-bold">@ViewBag.PendingAppointments</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- İkinci Sıra Kartlar -->
+    <div class="row g-4 mb-4">
+        <!-- En Popüler Hizmet -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-trophy-fill text-warning"></i> En Popüler Hizmet
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.MostPopularService != null)
+                    {
+                        var service = ViewBag.MostPopularService;
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-warning bg-opacity-10 rounded-circle p-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-star-fill text-warning fs-3"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h4 class="mb-1">@service.ServiceType.Name</h4>
+                                <p class="text-muted mb-0">
+                                    <strong>@service.Count</strong> randevu alındı
+                                </p>
+                                <p class="text-muted small mb-0">
+                                    @service.ServiceType.DurationInMinutes dk • @service.ServiceType.Price.ToString("N2") ₺
+                                </p>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Henüz randevu verisi yok.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- En Çok Randevu Alan Antrenör -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-award-fill text-success"></i> En Çok Randevu Alan Antrenör
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.TopTrainer != null)
+                    {
+                        var trainer = ViewBag.TopTrainer;
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-success bg-opacity-10 rounded-circle p-3" style="width: 60px; height: 60px; display: flex; align-items-center; justify-content: center;">
+                                    <i class="bi bi-person-fill text-success fs-3"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h4 class="mb-1">@trainer.Trainer.FullName</h4>
+                                <p class="text-muted mb-0">
+                                    <strong>@trainer.Count</strong> randevu verildi
+                                </p>
+                                @if (trainer.Trainer.Gym != null)
+                                {
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-building"></i> @trainer.Trainer.Gym.Name
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">Henüz randevu verisi yok.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Durum Özeti -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pie-chart-fill text-primary"></i> Randevu Durumu Özeti
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="p-3">
+                                <i class="bi bi-hourglass-split text-warning fs-1 mb-2 d-block"></i>
+                                <h3 class="mb-0">@ViewBag.PendingAppointments</h3>
+                                <p class="text-muted mb-0">Bekleyen</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3">
+                                <i class="bi bi-check-circle-fill text-success fs-1 mb-2 d-block"></i>
+                                <h3 class="mb-0">@ViewBag.ApprovedAppointments</h3>
+                                <p class="text-muted mb-0">Onaylanan</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3">
+                                <i class="bi bi-calendar-event text-info fs-1 mb-2 d-block"></i>
+                                <h3 class="mb-0">@ViewBag.TodayAppointments</h3>
+                                <p class="text-muted mb-0">Bugün</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-3">
+                                <i class="bi bi-calendar-check text-primary fs-1 mb-2 d-block"></i>
+                                <h3 class="mb-0">@ViewBag.TotalAppointments</h3>
+                                <p class="text-muted mb-0">Toplam</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Son Randevular -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history text-primary"></i> Son Randevular
+                    </h5>
+                    <a asp-area="Admin" asp-controller="Appointment" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                        Tümünü Gör <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    @if (ViewBag.RecentAppointments != null && ViewBag.RecentAppointments.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Üye</th>
+                                        <th>Antrenör</th>
+                                        <th>Hizmet</th>
+                                        <th>Tarih & Saat</th>
+                                        <th>Durum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in ViewBag.RecentAppointments)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@appointment.Member.FullName</strong>
+                                            </td>
+                                            <td>@appointment.Trainer.FullName</td>
+                                            <td>
+                                                @appointment.ServiceType.Name
+                                                <small class="text-muted">(@appointment.ServiceType.DurationInMinutes dk)</small>
+                                            </td>
+                                            <td>
+                                                <i class="bi bi-calendar3"></i> @appointment.StartDateTime.ToString("dd.MM.yyyy")
+                                                <br>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-clock"></i> @appointment.StartDateTime.ToString("HH:mm")
+                                                </small>
+                                            </td>
+                                            <td>
+                                                @switch (appointment.Status)
+                                                {
+                                                    case FitMindAI.Models.AppointmentStatus.Pending:
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="bi bi-clock"></i> Bekliyor
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Approved:
+                                                        <span class="badge bg-success">
+                                                            <i class="bi bi-check-circle"></i> Onaylandı
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Rejected:
+                                                        <span class="badge bg-danger">
+                                                            <i class="bi bi-x-circle"></i> Reddedildi
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Canceled:
+                                                        <span class="badge bg-secondary">
+                                                            <i class="bi bi-slash-circle"></i> İptal Edildi
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Completed:
+                                                        <span class="badge bg-info">
+                                                            <i class="bi bi-check2-all"></i> Tamamlandı
+                                                        </span>
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            <p class="mb-0">Henüz randevu kaydı yok.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

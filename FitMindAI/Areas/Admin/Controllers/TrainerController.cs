@@ -61,6 +61,20 @@ public class TrainerController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Trainer trainer, int[] selectedSpecialties, int[] selectedServices)
     {
+        // Navigation property'leri ModelState'den kaldır (sadece ID kullanıyoruz)
+        ModelState.Remove("Gym");
+        ModelState.Remove("TrainerSpecialties");
+        ModelState.Remove("TrainerServices");
+        ModelState.Remove("Availabilities");
+        ModelState.Remove("Appointments");
+        
+        // ModelState hatalarını logla (debug için)
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            TempData["ErrorMessage"] = "Hata: " + string.Join(", ", errors);
+        }
+        
         if (ModelState.IsValid)
         {
             _context.Add(trainer);
@@ -133,6 +147,13 @@ public class TrainerController : Controller
     {
         if (id != trainer.Id)
             return NotFound();
+
+        // Navigation property'leri ModelState'den kaldır
+        ModelState.Remove("Gym");
+        ModelState.Remove("TrainerSpecialties");
+        ModelState.Remove("TrainerServices");
+        ModelState.Remove("Availabilities");
+        ModelState.Remove("Appointments");
 
         if (ModelState.IsValid)
         {
