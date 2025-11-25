@@ -35,6 +35,15 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Appointment" asp-action="MyAppointments">Randevularım</a>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-stars"></i> AI Antrenman
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="AiRecommendation" asp-action="Create"><i class="bi bi-plus-circle"></i> Yeni Program Oluştur</a></li>
+                                    <li><a class="dropdown-item" asp-controller="AiRecommendation" asp-action="MyRecommendations"><i class="bi bi-list-check"></i> Geçmiş Önerilerim</a></li>
+                                </ul>
+                            </li>
                         }
                         @if (User.IsInRole("Admin"))
                         {
@@ -53,6 +62,8 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="Trainer" asp-action="Index">Antrenörler</a></li>
                                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="TrainerAvailability" asp-action="Index">Müsaitlik Takvimi</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="AiRecommendations" asp-action="Index"><i class="bi bi-robot"></i> AI Logları</a></li>
                                 </ul>
                             </li>
                         }

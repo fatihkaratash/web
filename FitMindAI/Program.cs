@@ -25,6 +25,11 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
 
 // application services
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddHttpClient<IAiService, GeminiService>()
+    .ConfigureHttpClient(client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(60); // Gemini API için 60 saniye timeout
+    });
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

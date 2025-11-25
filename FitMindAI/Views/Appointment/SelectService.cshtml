@@ -16,14 +16,17 @@
         }
     </div>
 
-    <form asp-action="SelectDateTime" method="get">
+    <form asp-action="CreateAppointment" method="post" id="appointmentForm">
+        @Html.AntiForgeryToken()
         <input type="hidden" name="trainerId" value="@Model.TrainerId" />
         
         <div class="list-group mb-4">
+            <h5 class="mb-3">1. Servis Seçin:</h5>
             @foreach (var service in Model.Services)
             {
                 <label class="list-group-item list-group-item-action">
-                    <input type="radio" name="serviceTypeId" value="@service.Id" required class="form-check-input me-2" />
+                    <input type="radio" name="serviceTypeId" value="@service.Id" required class="form-check-input me-2" 
+                           data-duration="@service.DurationInMinutes" />
                     <div>
                         <h5 class="mb-1">@service.Name</h5>
                         @if (!string.IsNullOrEmpty(service.Description))
@@ -39,9 +42,92 @@
             }
         </div>
 
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">2. Tarih ve Saat Seçin:</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="appointmentDate" class="form-label">Randevu Tarihi</label>
+                        <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" 
+                               min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required />
+                        <small class="text-muted">En erken yarın için randevu alabilirsiniz</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="appointmentTime" class="form-label">Randevu Saati</label>
+                        <select id="appointmentTime" name="appointmentTime" class="form-select" required>
+                            <option value="">Önce tarih seçiniz</option>
+                        </select>
+                        <small class="text-muted" id="availabilityHint">Müsait saatler gösterilecek</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="d-flex gap-2">
             <a asp-action="SelectTrainer" class="btn btn-secondary">Geri</a>
-            <button type="submit" class="btn btn-primary">İleri</button>
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="bi bi-check-circle"></i> Randevuyu Onayla
+            </button>
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        const trainerId = @Model.TrainerId;
+        let selectedServiceId = null;
+
+        // Servis seçimi değiştiğinde
+        document.querySelectorAll('input[name="serviceTypeId"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                selectedServiceId = this.value;
+                const date = document.getElementById('appointmentDate').value;
+                if (date) {
+                    loadAvailableSlots(date);
+                }
+            });
+        });
+
+        // Tarih değiştiğinde müsait saatleri yükle
+        document.getElementById('appointmentDate').addEventListener('change', function() {
+            const date = this.value;
+            if (selectedServiceId && date) {
+                loadAvailableSlots(date);
+            }
+        });
+
+        function loadAvailableSlots(date) {
+            const timeSelect = document.getElementById('appointmentTime');
+            const hint = document.getElementById('availabilityHint');
+            
+            timeSelect.innerHTML = '<option value="">Yükleniyor...</option>';
+            hint.textContent = 'Müsait saatler kontrol ediliyor...';
+
+            fetch(`/api/trainers/${trainerId}/available-slots?serviceTypeId=${selectedServiceId}&date=${date}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success && result.data && result.data.length > 0) {
+                        timeSelect.innerHTML = '<option value="">Saat seçiniz</option>';
+                        result.data.forEach(slot => {
+                            const time = new Date(slot).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                            timeSelect.innerHTML += `<option value="${slot}">${time}</option>`;
+                        });
+                        hint.textContent = `${result.data.length} müsait saat bulundu`;
+                        hint.className = 'text-success';
+                    } else {
+                        timeSelect.innerHTML = '<option value="">Müsait saat yok</option>';
+                        hint.textContent = 'Bu tarihte müsait saat bulunmamaktadır';
+                        hint.className = 'text-danger';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    timeSelect.innerHTML = '<option value="">Hata oluştu</option>';
+                    hint.textContent = 'Müsait saatler yüklenirken hata oluştu';
+                    hint.className = 'text-danger';
+                });
+        }
+    </script>
+}

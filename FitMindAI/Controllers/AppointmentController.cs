@@ -72,7 +72,127 @@ namespace FitMindAI.Controllers
             return View(viewModel);
         }
 
-        // GET: Appointment/SelectDateTime?trainerId=X&serviceTypeId=Y
+        // POST: Appointment/CreateAppointment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateAppointment(int trainerId, int serviceTypeId, string appointmentDate, string appointmentTime)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var member = await _context.Members
+                .FirstOrDefaultAsync(m => m.UserId == user.Id);
+
+            if (member == null)
+            {
+                TempData["Error"] = "Üye kaydınız bulunamadı.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Antrenör ve servisi kontrol et
+            var trainer = await _context.Trainers.FindAsync(trainerId);
+            var service = await _context.ServiceTypes.FindAsync(serviceTypeId);
+
+            if (trainer == null || service == null)
+            {
+                TempData["Error"] = "Antrenör veya servis bulunamadı.";
+                return RedirectToAction(nameof(SelectTrainer));
+            }
+
+            // Tarih ve saati parse et
+            if (!DateTime.TryParse(appointmentTime, out var startDateTime))
+            {
+                TempData["Error"] = "Geçersiz tarih/saat formatı.";
+                return RedirectToAction(nameof(SelectService), new { trainerId });
+            }
+
+            // Slot hala müsait mi kontrol et
+            var date = DateOnly.FromDateTime(startDateTime);
+            var availableSlots = await _appointmentService.GetAvailableSlotsAsync(trainerId, serviceTypeId, date);
+            
+            if (!availableSlots.Any(s => s == startDateTime))
+            {
+                TempData["Error"] = "Seçtiğiniz saat artık müsait değil. Lütfen başka bir saat seçin.";
+                return RedirectToAction(nameof(SelectService), new { trainerId });
+            }
+
+            var endDateTime = startDateTime.AddMinutes(service.DurationInMinutes);
+
+            var appointment = new Models.Appointment
+            {
+                MemberId = member.Id,
+                TrainerId = trainerId,
+                ServiceTypeId = serviceTypeId,
+                StartDateTime = startDateTime,
+                EndDateTime = endDateTime,
+                TotalPrice = service.Price,
+                Status = Models.AppointmentStatus.Pending,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"Randevunuz oluşturuldu! Tarih: {startDateTime:dd/MM/yyyy HH:mm}";
+            return RedirectToAction(nameof(MyAppointments));
+        }
+
+        // POST: Appointment/QuickBook (ESKİ - SİL)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> QuickBook(int trainerId, int serviceTypeId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var member = await _context.Members
+                .FirstOrDefaultAsync(m => m.UserId == user.Id);
+
+            if (member == null)
+            {
+                TempData["Error"] = "Üye kaydınız bulunamadı.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Antrenör ve servisi kontrol et
+            var trainer = await _context.Trainers.FindAsync(trainerId);
+            var service = await _context.ServiceTypes.FindAsync(serviceTypeId);
+
+            if (trainer == null || service == null)
+            {
+                return NotFound();
+            }
+
+            // Randevu oluştur (otomatik tarih: yarından itibaren)
+            var appointmentStart = DateTime.UtcNow.AddDays(1).Date.AddHours(10); // Yarın saat 10:00
+            var appointmentEnd = appointmentStart.AddMinutes(service.DurationInMinutes);
+
+            var appointment = new Models.Appointment
+            {
+                MemberId = member.Id,
+                TrainerId = trainerId,
+                ServiceTypeId = serviceTypeId,
+                StartDateTime = appointmentStart,
+                EndDateTime = appointmentEnd,
+                TotalPrice = service.Price,
+                Status = Models.AppointmentStatus.Pending,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = $"Randevunuz oluşturuldu! Tarih: {appointmentStart:dd/MM/yyyy HH:mm} - Antrenör size dönüş yapacaktır.";
+            return RedirectToAction(nameof(MyAppointments));
+        }
+
+        // GET: Appointment/SelectDateTime?trainerId=X&serviceTypeId=Y (ESKİ - KALDIR)
         // POST: Appointment/SelectDateTime (date seçildiğinde)
         [HttpGet]
         [HttpPost]

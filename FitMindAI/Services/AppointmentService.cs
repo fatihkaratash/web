@@ -48,14 +48,43 @@ public class AppointmentService : IAppointmentService
         var duration = service.DurationInMinutes;
         var dayOfWeek = (int)date.DayOfWeek;
 
+        // Antrenörü ve salon bilgisini al
+        var trainer = await _context.Trainers
+            .Include(t => t.Gym)
+            .FirstOrDefaultAsync(t => t.Id == trainerId);
+
+        if (trainer?.Gym == null)
+            return new List<DateTime>();
+
+        // Salon saatleri
+        var gymOpenTime = trainer.Gym.OpeningHour;
+        var gymCloseTime = trainer.Gym.ClosingHour;
+
         // o gun icin musaitlik kayitlarini al
         var availabilities = await _context.TrainerAvailabilities
             .Where(ta => ta.TrainerId == trainerId && ta.DayOfWeek == dayOfWeek)
             .OrderBy(ta => ta.StartTime)
             .ToListAsync();
 
+        // Eğer musaitlik kaydı yoksa varsayılan çalışma saatleri kullan (salon saatleri)
         if (!availabilities.Any())
-            return new List<DateTime>();
+        {
+            // Pazar günü kapalı
+            if (dayOfWeek == 0)
+                return new List<DateTime>();
+
+            // Varsayılan: Antrenör salon saatleri boyunca çalışır
+            availabilities = new List<TrainerAvailability>
+            {
+                new TrainerAvailability
+                {
+                    TrainerId = trainerId,
+                    DayOfWeek = dayOfWeek,
+                    StartTime = gymOpenTime,
+                    EndTime = gymCloseTime
+                }
+            };
+        }
 
         // o gune ait tum randevulari al (iptal ve red edilmemis)
         var existingAppointments = await _context.Appointments
@@ -70,13 +99,21 @@ public class AppointmentService : IAppointmentService
         // her musaitlik blogu icin slot uret
         foreach (var availability in availabilities)
         {
-            var currentTime = availability.StartTime;
+            // Musaitlik saatlerini salon saatleri ile sınırla
+            var effectiveStartTime = availability.StartTime < gymOpenTime ? gymOpenTime : availability.StartTime;
+            var effectiveEndTime = availability.EndTime > gymCloseTime ? gymCloseTime : availability.EndTime;
+
+            var currentTime = effectiveStartTime;
             var baseDate = date.ToDateTime(TimeOnly.MinValue);
 
-            while (currentTime.AddMinutes(duration) <= availability.EndTime)
+            while (currentTime.AddMinutes(duration) <= effectiveEndTime)
             {
                 var slotDateTime = baseDate.Add(currentTime.ToTimeSpan());
                 var slotEndDateTime = slotDateTime.AddMinutes(duration);
+
+                // Slot salon kapanış saatini aşıyor mu?
+                if (TimeOnly.FromDateTime(slotEndDateTime) > gymCloseTime)
+                    break;
 
                 // bu slotta cakisan randevu var mi kontrol et
                 var hasOverlap = existingAppointments.Any(a =>

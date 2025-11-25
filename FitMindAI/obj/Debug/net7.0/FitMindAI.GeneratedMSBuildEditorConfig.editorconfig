@@ -16,6 +16,14 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Projects\web\FitMindAI
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/AiRecommendations/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWlSZWNvbW1lbmRhdGlvbnNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/AiRecommendations/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWlSZWNvbW1lbmRhdGlvbnNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Projects/web/FitMindAI/Areas/Admin/Views/Appointment/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXBwb2ludG1lbnRcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -154,6 +162,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Projects/web/FitMindAI/Areas/Members/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcTWVtYmVyc1xQYWdlc1xfVmlld1N0YXJ0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/web/FitMindAI/Views/AiRecommendation/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWlSZWNvbW1lbmRhdGlvblxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/web/FitMindAI/Views/AiRecommendation/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWlSZWNvbW1lbmRhdGlvblxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Projects/web/FitMindAI/Views/AiRecommendation/MyRecommendations.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWlSZWNvbW1lbmRhdGlvblxNeVJlY29tbWVuZGF0aW9ucy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Projects/web/FitMindAI/Views/Appointment/Confirm.cshtml]

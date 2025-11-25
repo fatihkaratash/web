@@ -87,6 +87,9 @@ namespace FitMindAI.Areas.Members.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    // Member rolünü ata
+                    await _userManager.AddToRoleAsync(user, "Member");
+
                     // Otomatik olarak Member kaydı oluştur
                     var member = new Member
                     {

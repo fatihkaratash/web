@@ -1,0 +1,230 @@
+@model FitMindAI.ViewModels.AiRecommendationFormViewModel
+@{
+    ViewData["Title"] = "AI Antrenman Önerisi";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="mb-3">AI Antrenman Önerisi</h2>
+            <p class="text-muted">Kişisel bilgilerinize göre Google Gemini AI tarafından özel antrenman programı oluşturulur.</p>
+            <hr />
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <form method="post" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Kişisel Bilgiler</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="HeightCm" class="form-label"></label>
+                                <input asp-for="HeightCm" class="form-control" placeholder="örn: 175" />
+                                <span asp-validation-for="HeightCm" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="WeightKg" class="form-label"></label>
+                                <input asp-for="WeightKg" class="form-control" placeholder="örn: 70" />
+                                <span asp-validation-for="WeightKg" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Age" class="form-label"></label>
+                                <input asp-for="Age" class="form-control" placeholder="örn: 25" />
+                                <span asp-validation-for="Age" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Gender" class="form-label"></label>
+                            <select asp-for="Gender" class="form-select">
+                                <option value="">-- Seçiniz --</option>
+                                <option value="Erkek">Erkek</option>
+                                <option value="Kadın">Kadın</option>
+                                <option value="Belirtmek istemiyorum">Belirtmek istemiyorum</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Hedef ve Deneyim</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Goal" class="form-label"></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Goal" value="Kilo vermek" id="goalWeight" />
+                                <label class="form-check-label" for="goalWeight">Kilo vermek</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Goal" value="Kas yapmak" id="goalMuscle" />
+                                <label class="form-check-label" for="goalMuscle">Kas yapmak</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Goal" value="Fit kalmak" id="goalFit" />
+                                <label class="form-check-label" for="goalFit">Fit kalmak</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" asp-for="Goal" value="Dayanıklılık" id="goalEndurance" />
+                                <label class="form-check-label" for="goalEndurance">Dayanıklılık</label>
+                            </div>
+                            <span asp-validation-for="Goal" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Experience" class="form-label"></label>
+                            <select asp-for="Experience" class="form-select">
+                                <option value="">-- Seçiniz --</option>
+                                <option value="Yeni başlıyorum">Yeni başlıyorum</option>
+                                <option value="Orta seviye">Orta seviye</option>
+                                <option value="İleri seviye">İleri seviye</option>
+                            </select>
+                            <span asp-validation-for="Experience" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">⚙️ Antrenman Tercihleri</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Frequency" class="form-label"></label>
+                            <select asp-for="Frequency" class="form-select">
+                                <option value="">-- Seçiniz --</option>
+                                <option value="Haftada 2">Haftada 2 gün</option>
+                                <option value="Haftada 3">Haftada 3 gün</option>
+                                <option value="Haftada 4">Haftada 4 gün</option>
+                                <option value="Haftada 5+">Haftada 5+ gün</option>
+                            </select>
+                            <span asp-validation-for="Frequency" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Equipment" class="form-label"></label>
+                            <select asp-for="Equipment" class="form-select">
+                                <option value="">-- Seçiniz --</option>
+                                <option value="Ev - dumbbell/bodyweight">Ev - dumbbell/bodyweight</option>
+                                <option value="Spor salonu - tam ekipman">Spor salonu - tam ekipman</option>
+                            </select>
+                            <span asp-validation-for="Equipment" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label"></label>
+                            <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Sakatlık, rahatsızlık veya özel notlarınızı yazabilirsiniz (opsiyonel)"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                            <small class="form-text text-muted">Örnek: "Sol omzumda hassasiyet var", "Diz sorunu nedeniyle squat yapamıyorum"</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mb-4">
+                    <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                        <i class="bi bi-stars"></i> AI Programı Oluştur
+                    </button>
+                </div>
+
+                <!-- Loading Overlay - Form üzerinde gösterilir -->
+                <div id="loadingOverlay" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; width: 90%; max-width: 500px;">
+                    <div class="card border-primary shadow-lg">
+                        <div class="card-body text-center py-5">
+                            <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                                <span class="visually-hidden">Yükleniyor...</span>
+                            </div>
+                            <h5 class="text-primary">AI Programınız Hazırlanıyor...</h5>
+                            <p class="text-muted">Google Gemini AI sizin için özel antrenman programı oluşturuyor.</p>
+                            <p class="text-muted small">Bu işlem 15-30 saniye sürebilir, lütfen bekleyin.</p>
+                            <div class="progress mt-3" style="height: 25px;">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" 
+                                     style="width: 100%">Lütfen bekleyin...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Backdrop -->
+                <div id="loadingBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9998;"></div>
+
+                <div class="alert alert-info">
+                    <strong>ℹ️ Not:</strong> Günlük limit: 3 AI önerisi. Bu sayede ücretsiz hizmeti sürdürebiliyoruz.
+                </div>
+            </form>
+
+            @if (Model?.IsSuccess == true && !string.IsNullOrEmpty(Model.AiResponse))
+            {
+                <div id="aiResultCard" class="card mt-4 border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Antrenman Programınız</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="bg-light p-3 rounded" style="white-space: pre-line; line-height: 1.7;">
+                            @Model.AiResponse
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Create" class="btn btn-outline-primary">
+                                <i class="bi bi-arrow-repeat"></i> Yeni Program
+                            </a>
+                            <a asp-action="MyRecommendations" class="btn btn-primary">
+                                <i class="bi bi-list"></i> Tüm Programlarım
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Sayfa yüklendiğinde eğer sonuç varsa otomatik scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            var resultCard = document.getElementById('aiResultCard');
+            if (resultCard) {
+                // Smooth scroll to result
+                setTimeout(function() {
+                    resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Highlight animation
+                    resultCard.classList.add('animate__animated', 'animate__fadeIn');
+                }, 300);
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function(e) {
+            // Form validasyonu başarılıysa loading göster
+            if (this.checkValidity()) {
+                var submitBtn = document.getElementById('submitBtn');
+                var loadingOverlay = document.getElementById('loadingOverlay');
+                var loadingBackdrop = document.getElementById('loadingBackdrop');
+                
+                // Submit butonunu disable et
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Yükleniyor...';
+                
+                // Loading overlay ve backdrop'u göster
+                loadingOverlay.style.display = 'block';
+                loadingBackdrop.style.display = 'block';
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    </script>
+}
