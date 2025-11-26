@@ -42,7 +42,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Trainer.FullName</td>
+                    <td>@(item.Trainer?.FullName ?? "Bilinmeyen")</td>
                     <td>@item.Trainer.Gym.Name</td>
                     <td>@GetDayName(item.DayOfWeek)</td>
                     <td>@item.StartTime.ToString("HH:mm") - @item.EndTime.ToString("HH:mm")</td>

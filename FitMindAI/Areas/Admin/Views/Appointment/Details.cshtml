@@ -35,14 +35,14 @@
 
                     <dt class="col-sm-4">Salon</dt>
                     <dd class="col-sm-8">
-                        <strong>@Model.Trainer.Gym.Name</strong><br />
-                        <small class="text-muted">@Model.Trainer.Gym.Address</small>
+                        <strong>@(Model.Trainer?.Gym?.Name ?? "Belirtilmemiş")</strong><br />
+                        <small class="text-muted">@(Model.Trainer?.Gym?.Address ?? "-")</small>
                     </dd>
 
                     <dt class="col-sm-4">Salon Saatleri</dt>
                     <dd class="col-sm-8">
-                        @Model.Trainer.Gym.OpeningHour.ToString(@"hh\:mm") - 
-                        @Model.Trainer.Gym.ClosingHour.ToString(@"hh\:mm")
+                        @(Model.Trainer?.Gym?.OpeningHour.ToString(@"hh\:mm") ?? "-") - 
+                        @(Model.Trainer?.Gym?.ClosingHour.ToString(@"hh\:mm") ?? "-")
                     </dd>
                 </dl>
             </div>

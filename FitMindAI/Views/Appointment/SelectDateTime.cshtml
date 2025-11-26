@@ -14,7 +14,7 @@
 
     <div class="alert alert-info">
         <strong>Antrenör:</strong> @trainer.FullName<br />
-        <strong>Salon:</strong> @trainer.Gym.Name<br />
+        <strong>Salon:</strong> @(trainer.Gym?.Name ?? "Belirtilmemiş")<br />
         <strong>Servis:</strong> @service.Name (@service.DurationInMinutes dk, @service.Price.ToString("C2"))
     </div>
 

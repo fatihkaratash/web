@@ -42,7 +42,7 @@ public class GeminiService : IAiService
             // Prompt oluştur
             var prompt = BuildPrompt(heightCm, weightKg, age, gender, goal, experience, frequency, equipment, notes);
 
-            // Gemini request body with token limit for concise responses
+            // Gemini istek ayarları - kısa ve öz yanıt için optimize edildi
             var requestBody = new
             {
                 contents = new[]
@@ -57,9 +57,11 @@ public class GeminiService : IAiService
                 },
                 generationConfig = new
                 {
-                    maxOutputTokens = 1000,  // Artırıldı - thought tokens sorunu için
-                    temperature = 0.7,
-                    topP = 0.95
+                    candidateCount = 1,
+                    maxOutputTokens = 2000, // Programın kesilmemesi için artırıldı
+                    temperature = 0.4,      // Daha tutarlı ve formatlı yanıt için
+                    topP = 0.9,
+                    topK = 20
                 },
                 safetySettings = new[]
                 {
@@ -109,15 +111,22 @@ public class GeminiService : IAiService
             if (candidate?.Content?.Parts == null || candidate.Content.Parts.Length == 0)
             {
                 var finishReason = candidate?.FinishReason ?? "UNKNOWN";
-                _logger.LogWarning("Gemini API'den geçersiz yapıda yanıt döndü (Content veya Parts boş). FinishReason: {Reason}", finishReason);
+                _logger.LogWarning("Gemini API'den geçersiz yapıda yanıt döndü. FinishReason: {Reason}", finishReason);
                 
-                // Gemini 2.5-flash bazen MAX_TOKENS olduğunda thought tokens kullanıyor ama Parts boş geliyor
+                // Token limiti durumunda kullanıcıya net mesaj
                 if (finishReason == "MAX_TOKENS")
                 {
-                    return "AI modelinin yanıtı token limitine takıldı. Lütfen daha kısa bilgiler girerek tekrar deneyin veya birkaç dakika sonra tekrar deneyin.";
+                    return "⚠️ AI yanıtı kısa kesildi.\n\n" +
+                           "Lütfen daha basit bilgiler girin veya 'Özel Notlar' kısmını kısa tutun.\n\n" +
+                           "Örnek: 'Diz ağrım var' yerine sadece 'Diz sorunu' yazın.";
                 }
                 
-                return "AI servisinden yanıt alınamadı. Lütfen daha sonra tekrar deneyin.";
+                if (finishReason == "SAFETY")
+                {
+                    return "⚠️ AI güvenlik kuralları nedeniyle yanıt veremedi.\n\nLütfen farklı bilgiler girerek tekrar deneyin.";
+                }
+                
+                return "❌ AI servisinden yanıt alınamadı.\n\nLütfen birkaç dakika sonra tekrar deneyin.";
             }
 
             var result = candidate.Content.Parts[0].Text;
@@ -125,7 +134,7 @@ public class GeminiService : IAiService
             if (string.IsNullOrWhiteSpace(result))
             {
                 _logger.LogWarning("Gemini API'den boş metin döndü");
-                return "AI servisinden yanıt alınamadı. Lütfen daha sonra tekrar deneyin.";
+                return "❌ AI yanıt üretemedi. Lütfen tekrar deneyin.";
             }
 
             return result;
@@ -137,47 +146,44 @@ public class GeminiService : IAiService
         }
     }
 
+    // Kullanıcı bilgilerine göre AI prompt hazırla
     private string BuildPrompt(int heightCm, int weightKg, int age, string gender, string goal, 
         string experience, string frequency, string equipment, string? notes)
     {
         var sb = new StringBuilder();
         
-        sb.AppendLine("Sen profesyonel bir fitness antrenörüsün. Kullanıcı bilgilerine göre KISA VE ÖZ bir haftalık antrenman programı hazırla.");
+        sb.AppendLine("Sen profesyonel bir fitness antrenörüsün. Aşağıdaki üye için 1 haftalık antrenman programı hazırla.");
+        sb.AppendLine("GÖREV: Önce üyenin hedefine dair 1-2 cümlelik motive edici kısa bir uzman yorumu yap, ardından programı listele.");
         sb.AppendLine();
-        sb.AppendLine("KULLANICI BİLGİLERİ:");
-        sb.AppendLine($"- Boy: {heightCm} cm");
-        sb.AppendLine($"- Kilo: {weightKg} kg");
-        sb.AppendLine($"- Yaş: {age}");
-        sb.AppendLine($"- Cinsiyet: {gender}");
-        sb.AppendLine($"- Hedef: {goal}");
-        sb.AppendLine($"- Deneyim Seviyesi: {experience}");
-        sb.AppendLine($"- Haftalık Antrenman Günü: {frequency}");
-        sb.AppendLine($"- Ekipman: {equipment}");
+        sb.AppendLine($"Üye Profili: {age} yaş, {gender}, {heightCm}cm, {weightKg}kg");
+        sb.AppendLine($"Hedef: {goal}");
+        sb.AppendLine($"Deneyim: {experience}");
+        sb.AppendLine($"Sıklık: {frequency}");
+        sb.AppendLine($"Ekipman: {equipment}");
 
         if (!string.IsNullOrWhiteSpace(notes))
         {
-            sb.AppendLine($"- Özel Notlar: {notes}");
+            sb.AppendLine($"Özel Durumlar/Notlar: {notes}");
         }
 
         sb.AppendLine();
+        sb.AppendLine("İSTENEN FORMAT (Aynen bu yapıyı kullan):");
+        sb.AppendLine("YORUM: [Buraya 1-2 cümlelik uzman görüşünü yaz]");
+        sb.AppendLine();
+        sb.AppendLine("--------------------------------------------------");
+        sb.AppendLine("GÜN 1: [Odak Bölgesi]");
+        sb.AppendLine("1. [Hareket Adı] - [Set]x[Tekrar]");
+        sb.AppendLine("2. [Hareket Adı] - [Set]x[Tekrar]");
+        sb.AppendLine("...");
+        sb.AppendLine();
+        sb.AppendLine("GÜN 2: [Odak Bölgesi]");
+        sb.AppendLine("...");
+        sb.AppendLine("--------------------------------------------------");
         sb.AppendLine("KURALLAR:");
-        sb.AppendLine("- 1 haftalık (7 gün) program oluştur");
-        sb.AppendLine("- Her antrenman günü için 4-5 egzersiz ver");
-        sb.AppendLine("- Dinlenme günlerini belirt");
-        sb.AppendLine("- Format: 'Egzersiz Adı – Set x Tekrar' (örnek: Bench Press – 4x8)");
-        sb.AppendLine("- Uzun açıklamalar YAPMA, sadece liste ver");
-        sb.AppendLine("- Markdown başlıkları KULLANMA");
-        sb.AppendLine("- Toplam yanıt 400 kelimeyi geçmesin");
-        sb.AppendLine("- Sade, kısa, liste halinde yaz");
-        sb.AppendLine();
-        sb.AppendLine("ÖRNEK FORMAT:");
-        sb.AppendLine("Pazartesi (Göğüs-Triceps):");
-        sb.AppendLine("- Bench Press – 4x8");
-        sb.AppendLine("- Incline Dumbbell Press – 3x10");
-        sb.AppendLine("- Cable Fly – 3x12");
-        sb.AppendLine("- Triceps Dips – 3x10");
-        sb.AppendLine();
-        sb.AppendLine("Türkçe yaz ve sadece programı ver, gereksiz açıklama yapma.");
+        sb.AppendLine("1. Yorum kısmı maksimum 2 cümle olsun, çok uzatma.");
+        sb.AppendLine("2. Hareket isimlerini Türkçe (veya yaygın İngilizce) kullan.");
+        sb.AppendLine("3. Set ve tekrar sayılarını seviyeye uygun belirle.");
+        sb.AppendLine("4. Yanıtın asla yarıda kesilmemeli, tam bir haftayı kapsasın.");
 
         return sb.ToString();
     }

@@ -12,7 +12,7 @@
         <dd class="col-sm-9">@Model.FullName</dd>
 
         <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Gym)</dt>
-        <dd class="col-sm-9">@Model.Gym.Name</dd>
+        <dd class="col-sm-10">@(Model.Gym?.Name ?? "Belirtilmemiş")</dd>
 
         <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Bio)</dt>
         <dd class="col-sm-9">@(Model.Bio ?? "-")</dd>

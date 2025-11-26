@@ -145,12 +145,12 @@
                             <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
                                 <span class="visually-hidden">Yükleniyor...</span>
                             </div>
-                            <h5 class="text-primary">AI Programınız Hazırlanıyor...</h5>
-                            <p class="text-muted">Google Gemini AI sizin için özel antrenman programı oluşturuyor.</p>
-                            <p class="text-muted small">Bu işlem 15-30 saniye sürebilir, lütfen bekleyin.</p>
-                            <div class="progress mt-3" style="height: 25px;">
+                            <h5 class="text-primary mb-2">🤖 AI Çalışıyor...</h5>
+                            <p class="text-muted mb-1">Bilgileriniz analiz ediliyor</p>
+                            <p class="text-muted small mb-3">Antrenman programınız hazırlanıyor (10-20 saniye)</p>
+                            <div class="progress" style="height: 20px;">
                                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" 
-                                     style="width: 100%">Lütfen bekleyin...</div>
+                                     style="width: 100%">İşleniyor...</div>
                             </div>
                         </div>
                     </div>
@@ -158,30 +158,55 @@
                 <!-- Backdrop -->
                 <div id="loadingBackdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9998;"></div>
 
-                <div class="alert alert-info">
-                    <strong>ℹ️ Not:</strong> Günlük limit: 3 AI önerisi. Bu sayede ücretsiz hizmeti sürdürebiliyoruz.
+                <div class="alert alert-info border-info">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-info-circle-fill me-2 mt-1"></i>
+                        <div>
+                            <strong>Günlük Limit:</strong> Her gün 3 AI programı oluşturabilirsiniz.<br>
+                            <small class="text-muted">💡 İpucu: Kısa ve net bilgiler girin. "Özel Notlar" kısmını çok uzun yazmayın.</small>
+                        </div>
+                    </div>
                 </div>
             </form>
 
             @if (Model?.IsSuccess == true && !string.IsNullOrEmpty(Model.AiResponse))
             {
-                <div id="aiResultCard" class="card mt-4 border-success">
+                <div id="aiResultCard" class="card mt-4 border-success shadow">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Antrenman Programınız</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="bg-light p-3 rounded" style="white-space: pre-line; line-height: 1.7;">
-                            @Model.AiResponse
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <h5 class="mb-0">Antrenman Programınız Hazır!</h5>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="Create" class="btn btn-outline-primary">
-                                <i class="bi bi-arrow-repeat"></i> Yeni Program
-                            </a>
-                            <a asp-action="MyRecommendations" class="btn btn-primary">
-                                <i class="bi bi-list"></i> Tüm Programlarım
-                            </a>
+                    <div class="card-body">
+                        @if (Model.AiResponse.Contains("⚠️") || Model.AiResponse.Contains("❌"))
+                        {
+                            <!-- Hata mesajı -->
+                            <div class="alert alert-warning">
+                                <pre style="white-space: pre-line; margin: 0; font-family: inherit;">@Model.AiResponse</pre>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Başarılı program -->
+                            <div class="p-3 bg-light rounded border-start border-4 border-success" style="white-space: pre-line; line-height: 1.8; font-size: 1.05rem;">
+                                @Model.AiResponse
+                            </div>
+                        }
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="bi bi-robot"></i> Google Gemini 2.5 Flash tarafından oluşturuldu
+                            </small>
+                            <div>
+                                <a asp-action="Create" class="btn btn-outline-primary btn-sm me-2">
+                                    <i class="bi bi-arrow-repeat"></i> Yeni Program
+                                </a>
+                                <a asp-action="MyRecommendations" class="btn btn-success btn-sm">
+                                    <i class="bi bi-list-check"></i> Tüm Programlarım
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

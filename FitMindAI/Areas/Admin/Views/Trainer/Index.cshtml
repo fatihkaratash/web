@@ -40,7 +40,7 @@
             {
                 <tr>
                     <td>@item.FullName</td>
-                    <td>@item.Gym.Name</td>
+                    <td>@(item.Gym?.Name ?? "Belirtilmemiş")</td>
                     <td>
                         @if (item.IsActive)
                         {

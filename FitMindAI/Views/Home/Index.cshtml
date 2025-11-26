@@ -40,7 +40,7 @@
         </div>
     </div>
 
-    @if (!User.Identity.IsAuthenticated)
+    @if (User.Identity?.IsAuthenticated == true)
     {
         <div class="row mt-5">
             <div class="col-lg-8 mx-auto text-center">

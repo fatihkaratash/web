@@ -87,7 +87,7 @@ else
                 {
                     <tr>
                         <td>
-                            <strong>@item.Member.FullName</strong><br />
+                            <strong>@(item.Member?.FullName ?? "Bilinmeyen")</strong><br />
                             <small class="text-muted">@item.Member.UserId</small>
                         </td>
                         <td>@item.Trainer.FullName</td>
@@ -167,7 +167,7 @@ else
                                                     </div>
                                                     <div class="modal-body">
                                                         <p>
-                                                            <strong>@item.Member.FullName</strong> için 
+                                                            <strong>@(item.Member?.FullName ?? "Bilinmeyen")</strong> için 
                                                             <strong>@item.StartDateTime.ToString("dd.MM.yyyy HH:mm")</strong> 
                                                             tarihindeki randevuyu reddetmek istediğinize emin misiniz?
                                                         </p>
