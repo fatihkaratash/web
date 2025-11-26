@@ -19,23 +19,32 @@ public class TrainersApiController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var trainers = await _context.Trainers
-            .Include(t => t.Gym)
-            .Include(t => t.TrainerSpecialties)
-                .ThenInclude(ts => ts.Specialty)
-            .Where(t => t.IsActive)
-            .ToListAsync();
-
-        var result = trainers.Select(t => new
+        try
         {
-            t.Id,
-            t.FullName,
-            t.Bio,
-            Gym = t.Gym?.Name ?? "Salon Belirtilmemiş",
-            Specialties = t.TrainerSpecialties.Select(ts => ts.Specialty.Name).ToList()
-        });
+            var trainers = await _context.Trainers
+                .Include(t => t.Gym)
+                .Include(t => t.TrainerSpecialties)
+                    .ThenInclude(ts => ts.Specialty)
+                .Where(t => t.IsActive)
+                .ToListAsync();
 
-        return Ok(result);
+            var result = trainers.Select(t => new
+            {
+                t.Id,
+                t.FullName,
+                t.Bio,
+                Gym = t.Gym?.Name ?? "Salon Belirtilmemis",
+                Specialties = t.TrainerSpecialties != null 
+                    ? t.TrainerSpecialties.Where(ts => ts.Specialty != null).Select(ts => ts.Specialty.Name).ToList() 
+                    : new List<string>()
+            });
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "Veri cekilirken hata olustu", detail = ex.Message });
+        }
     }
 
     // Antrenör detayı - ID'ye göre bilgileri getir
@@ -77,31 +86,52 @@ public class TrainersApiController : ControllerBase
 
     // Seçilen tarihte çalışan antrenörler (günün müsaitlik saatlerine göre)
     [HttpGet("available")]
-    public async Task<IActionResult> GetAvailable([FromQuery] DateTime date)
+    public async Task<IActionResult> GetAvailable([FromQuery] DateTime? date)
     {
-        var dayOfWeek = (int)date.DayOfWeek;
-
-        // Seçilen gün müsait olan antrenörler
-        var availableTrainers = await _context.TrainerAvailabilities
-            .Include(ta => ta.Trainer)
-                .ThenInclude(t => t.Gym)
-            .Include(ta => ta.Trainer.TrainerSpecialties)
-                .ThenInclude(ts => ts.Specialty)
-            .Where(ta => ta.DayOfWeek == dayOfWeek && ta.Trainer.IsActive)
-            .Select(ta => ta.Trainer)
-            .Distinct()
-            .ToListAsync();
-
-        var result = availableTrainers.Select(t => new
+        try
         {
-            t.Id,
-            t.FullName,
-            t.Bio,
-            Gym = t.Gym?.Name ?? "Belirtilmemiş",
-            Specialties = t.TrainerSpecialties.Select(ts => ts.Specialty.Name).ToList()
+            // Tarih kontrolu
+            if (!date.HasValue)
+            {
+                return BadRequest(new { error = "Tarih parametresi gerekli", ornek = "?date=2025-11-27" });
+            }
+
+            // Gecmis tarih kontrolu
+            if (date.Value.Date < DateTime.Today)
+            {
+                return BadRequest(new { error = "Gecmis tarih secilemez", secilen = date.Value.ToString("yyyy-MM-dd"), bugun = DateTime.Today.ToString("yyyy-MM-dd") });
+            }
+
+            var dayOfWeek = (int)date.Value.DayOfWeek;
+
+            // Seçilen gün müsait olan antrenörler
+            var availableTrainers = await _context.TrainerAvailabilities
+                .Include(ta => ta.Trainer)
+                    .ThenInclude(t => t.Gym)
+                .Include(ta => ta.Trainer.TrainerSpecialties)
+                    .ThenInclude(ts => ts.Specialty)
+                .Where(ta => ta.DayOfWeek == dayOfWeek && ta.Trainer.IsActive)
+                .Select(ta => ta.Trainer)
+                .Distinct()
+                .ToListAsync();
+
+            var result = availableTrainers.Select(t => new
+            {
+                t.Id,
+                t.FullName,
+                t.Bio,
+                Gym = t.Gym?.Name ?? "Belirtilmemis",
+            Specialties = t.TrainerSpecialties != null 
+                ? t.TrainerSpecialties.Where(ts => ts.Specialty != null).Select(ts => ts.Specialty.Name).ToList() 
+                : new List<string>()
         });
 
-        return Ok(result);
+            return Ok(new { tarih = date.Value.ToString("yyyy-MM-dd"), gun = date.Value.ToString("dddd"), antrenorSayisi = result.Count(), antrenorler = result });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = "Veri cekilirken hata olustu", detail = ex.Message });
+        }
     }
 
     // Belirli bir antrenörün randevuları (tarih filtreleme ile)

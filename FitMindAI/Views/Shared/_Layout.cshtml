@@ -24,16 +24,13 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">Hakkımızda</a>
-                        </li>
                         @if (User.Identity?.IsAuthenticated == true && !User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Appointment" asp-action="SelectTrainer">Randevu Al</a>
+                                <a class="nav-link" asp-controller="Appointment" asp-action="SelectGym">Randevu Al</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Appointment" asp-action="MyAppointments">Randevularım</a>
+                                <a class="nav-link" asp-controller="Appointment" asp-action="MyAppointments">Randevularim</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -52,18 +49,18 @@
                                     Admin Paneli
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="ApiTest">API Test</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="Appointment" asp-action="Index">Randevular</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="Gym" asp-action="Index">Salonlar</a></li>
                                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="ServiceType" asp-action="Index">Hizmetler</a></li>
-                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Specialty" asp-action="Index">Uzmanlıklar</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Specialty" asp-action="Index">Uzmanliklar</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Trainer" asp-action="Index">Antrenörler</a></li>
-                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="TrainerAvailability" asp-action="Index">Müsaitlik Takvimi</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Trainer" asp-action="Index">Antrenorler</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="AiRecommendations" asp-action="Index"><i class="bi bi-robot"></i> AI Logları</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="AiRecommendations" asp-action="Index">AI Loglari</a></li>
                                 </ul>
                             </li>
                         }

@@ -112,9 +112,28 @@ public class TrainerController : Controller
                     });
                 }
             }
+            
+            // Otomatik musaitlik ekle - salon saatlerine gore (Pazartesi-Cumartesi)
+            if (trainer.GymId > 0)
+            {
+                var gym = await _context.Gyms.FindAsync(trainer.GymId);
+                if (gym != null)
+                {
+                    for (int day = 1; day <= 6; day++) // Pazartesi-Cumartesi
+                    {
+                        _context.TrainerAvailabilities.Add(new TrainerAvailability
+                        {
+                            TrainerId = trainer.Id,
+                            DayOfWeek = day,
+                            StartTime = gym.OpeningHour,
+                            EndTime = gym.ClosingHour
+                        });
+                    }
+                }
+            }
 
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Antrenör başarıyla eklendi!";
+            TempData["SuccessMessage"] = "Antrenor basariyla eklendi!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -133,6 +152,8 @@ public class TrainerController : Controller
         var trainer = await _context.Trainers
             .Include(t => t.TrainerSpecialties)
             .Include(t => t.TrainerServices)
+            .Include(t => t.Gym)
+            .Include(t => t.Availabilities)
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (trainer == null)
@@ -143,6 +164,11 @@ public class TrainerController : Controller
         ViewBag.ServiceTypes = await _context.ServiceTypes.ToListAsync();
         ViewBag.SelectedSpecialties = trainer.TrainerSpecialties.Select(ts => ts.SpecialtyId).ToList();
         ViewBag.SelectedServices = trainer.TrainerServices.Select(ts => ts.ServiceTypeId).ToList();
+        
+        // Musaitlik bilgilerini ViewBag'e ekle
+        ViewBag.Availabilities = trainer.Availabilities.OrderBy(a => a.DayOfWeek).ToList();
+        ViewBag.GymOpeningHour = trainer.Gym?.OpeningHour ?? new TimeOnly(9, 0);
+        ViewBag.GymClosingHour = trainer.Gym?.ClosingHour ?? new TimeOnly(21, 0);
 
         return View(trainer);
     }
@@ -150,7 +176,8 @@ public class TrainerController : Controller
     // POST: Admin/Trainer/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Trainer trainer, int[] selectedSpecialties, int[] selectedServices)
+    public async Task<IActionResult> Edit(int id, Trainer trainer, int[] selectedSpecialties, int[] selectedServices,
+        string[] availabilityDays, string[] availabilityStart, string[] availabilityEnd)
     {
         if (id != trainer.Id)
             return NotFound();
@@ -174,6 +201,10 @@ public class TrainerController : Controller
 
                 var oldServices = _context.TrainerServices.Where(ts => ts.TrainerId == id);
                 _context.TrainerServices.RemoveRange(oldServices);
+                
+                // eski musaitlikleri sil
+                var oldAvailabilities = _context.TrainerAvailabilities.Where(ta => ta.TrainerId == id);
+                _context.TrainerAvailabilities.RemoveRange(oldAvailabilities);
 
                 // yeni iliskileri ekle
                 if (selectedSpecialties != null)
@@ -199,9 +230,34 @@ public class TrainerController : Controller
                         });
                     }
                 }
+                
+                // yeni musaitlikleri ekle
+                if (availabilityDays != null)
+                {
+                    for (int i = 0; i < availabilityDays.Length; i++)
+                    {
+                        if (!string.IsNullOrEmpty(availabilityStart[i]) && !string.IsNullOrEmpty(availabilityEnd[i]))
+                        {
+                            var dayOfWeek = int.Parse(availabilityDays[i]);
+                            var startTime = TimeOnly.Parse(availabilityStart[i]);
+                            var endTime = TimeOnly.Parse(availabilityEnd[i]);
+                            
+                            if (startTime < endTime) // Gecerli saat araligi
+                            {
+                                _context.TrainerAvailabilities.Add(new TrainerAvailability
+                                {
+                                    TrainerId = trainer.Id,
+                                    DayOfWeek = dayOfWeek,
+                                    StartTime = startTime,
+                                    EndTime = endTime
+                                });
+                            }
+                        }
+                    }
+                }
 
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Antrenör başarıyla güncellendi!";
+                TempData["SuccessMessage"] = "Antrenor basariyla guncellendi!";
             }
             catch (DbUpdateConcurrencyException)
             {

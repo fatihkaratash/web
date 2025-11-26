@@ -6,10 +6,10 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-6">
         <form method="post">
-            <h2>Yeni hesap oluşturun</h2>
+            <h2>Yeni hesap olusturun</h2>
             <hr />
             <div asp-validation-summary="All" class="text-danger" role="alert"></div>
             
@@ -26,26 +26,19 @@
             </div>
             
             <div class="form-floating mb-3">
-                <input asp-for="Input.Password" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre" />
-                <label asp-for="Input.Password">Şifre</label>
+                <input asp-for="Input.Password" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Sifre" />
+                <label asp-for="Input.Password">Sifre</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             
             <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Şifre Tekrar" />
-                <label asp-for="Input.ConfirmPassword">Şifre Tekrar</label>
+                <input asp-for="Input.ConfirmPassword" type="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Sifre Tekrar" />
+                <label asp-for="Input.ConfirmPassword">Sifre Tekrar</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Kayıt Ol</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Kayit Ol</button>
         </form>
-    </div>
-    <div class="col-md-6">
-        <section>
-            <h3>Başka bir hizmet kullanın</h3>
-            <hr />
-            <p>Bu uygulamada harici giriş servisleri yapılandırılmamıştır.</p>
-        </section>
     </div>
 </div>
 

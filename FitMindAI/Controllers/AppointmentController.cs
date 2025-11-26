@@ -27,15 +27,33 @@ namespace FitMindAI.Controllers
             _context = context;
         }
 
-        // GET: Appointment/SelectTrainer
-        public async Task<IActionResult> SelectTrainer(int? gymId)
+        // GET: Appointment/SelectGym - Ilk adim: salon sec
+        public async Task<IActionResult> SelectGym()
         {
-            // Gym filtresi için dropdown
             var gyms = await _context.Gyms
                 .OrderBy(g => g.Name)
                 .ToListAsync();
-            ViewBag.Gyms = new SelectList(gyms, "Id", "Name", gymId);
-            ViewBag.SelectedGymId = gymId;
+
+            return View(gyms);
+        }
+
+        // GET: Appointment/SelectTrainer - Ikinci adim: antrenor sec
+        public async Task<IActionResult> SelectTrainer(int? gymId)
+        {
+            // Eger gymId yoksa salon secim sayfasina yonlendir
+            if (!gymId.HasValue)
+            {
+                return RedirectToAction(nameof(SelectGym));
+            }
+
+            // Secili salonu kontrol et
+            var gym = await _context.Gyms.FindAsync(gymId.Value);
+            if (gym == null)
+            {
+                return RedirectToAction(nameof(SelectGym));
+            }
+
+            ViewBag.SelectedGym = gym;
 
             // Antrenörleri getir ve ViewModel'e çevir
             var trainers = await _appointmentService.GetActiveTrainersAsync(gymId);

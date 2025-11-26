@@ -2,56 +2,25 @@
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="container mt-5">
+<div class="container mt-4">
     <div class="row">
-        <div class="col-lg-12 text-center mb-5">
-            <h1 class="display-3 fw-bold text-primary">FitMind AI'ye Hoş Geldiniz</h1>
-            <p class="lead text-muted">Akıllı Spor Salonu Yönetim ve Randevu Sistemi</p>
+        <div class="col-lg-12 text-center mb-3">
+            <h1 class="display-4 fw-bold text-primary">FitMind AI</h1>
+            <p class="text-muted">Spor Salonu Randevu Sistemi</p>
         </div>
     </div>
 
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-calendar-check fs-1 text-primary mb-3"></i>
-                    <h5 class="card-title">Kolay Randevu</h5>
-                    <p class="card-text">Antrenörlerinizle kolayca randevu alın. Müsait saatleri görüntüleyin ve hemen rezervasyon yapın.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-person-badge fs-1 text-success mb-3"></i>
-                    <h5 class="card-title">Profesyonel Antrenörler</h5>
-                    <p class="card-text">Uzman antrenörlerimiz ile fitness, yoga, pilates ve daha fazlası için özel dersler alın.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="bi bi-geo-alt fs-1 text-danger mb-3"></i>
-                    <h5 class="card-title">Birden Fazla Salon</h5>
-                    <p class="card-text">Size en yakın salonu seçin. Tüm salonlarımızda aynı kaliteli hizmeti alın.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @if (User.Identity?.IsAuthenticated == true)
+   
+    @if (User.Identity?.IsAuthenticated != true)
     {
-        <div class="row mt-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <div class="card shadow">
-                    <div class="card-body p-5">
-                        <h3 class="mb-4">Hemen Başlayın</h3>
-                        <p class="text-muted mb-4">Ücretsiz üye olun ve antrenörlerimizle randevu almaya başlayın</p>
-                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                            <a asp-area="Members" asp-page="/Account/Register" class="btn btn-primary btn-lg px-4">Üye Ol</a>
-                            <a asp-area="Members" asp-page="/Account/Login" class="btn btn-outline-secondary btn-lg px-4">Giriş Yap</a>
-                        </div>
+        <div class="row">
+            <div class="col-lg-6 mx-auto text-center">
+                <div class="p-4 border rounded bg-light">
+                    <h4 class="mb-3">Hemen Baslayin</h4>
+                    <p class="text-muted mb-3">Uye olun ve randevu almaya baslayin</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a asp-area="Members" asp-page="/Account/Register" class="btn btn-primary">Uye Ol</a>
+                        <a asp-area="Members" asp-page="/Account/Login" class="btn btn-outline-secondary">Giris Yap</a>
                     </div>
                 </div>
             </div>
@@ -59,16 +28,24 @@
     }
     else
     {
-        <div class="row mt-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <div class="card shadow bg-primary text-white">
-                    <div class="card-body p-5">
-                        <h3 class="mb-4">Randevu Almaya Hazır mısınız?</h3>
-                        <p class="mb-4">Antrenörlerimizi inceleyin ve size uygun saatte randevu alın</p>
-                        <a asp-controller="Appointment" asp-action="SelectTrainer" class="btn btn-light btn-lg px-5">Randevu Al</a>
-                    </div>
+        <div class="row">
+            <div class="col-lg-6 mx-auto text-center">
+                <div class="p-4 border rounded bg-primary text-white">
+                    <h4 class="mb-3">Randevu Al</h4>
+                    <p class="mb-3">Salonlarimizi inceleyin ve randevu alin</p>
+                    <a asp-controller="Appointment" asp-action="SelectGym" class="btn btn-light">Randevu Olustur</a>
                 </div>
             </div>
         </div>
     }
+
+     <div class="row mb-4">
+        <div class="col-lg-6 mx-auto">
+            <ul class="list-unstyled text-center">
+                <li class="mb-2">- Antrenorlerinizle kolayca randevu alin</li>
+                <li class="mb-2">- Uzman kadromuzla fitness, yoga ve pilates dersleri</li>
+                <li class="mb-2">- Farkli salonlarimizdan size uygun olani secin</li>
+            </ul>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,42 @@
+@model IEnumerable<FitMindAI.Models.Gym>
+@{
+    ViewData["Title"] = "Salon Secin";
+}
+
+<div class="container mt-4">
+    <h2>1. Salon Secin</h2>
+    <hr />
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            Aktif salon bulunamadi.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var gym in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@gym.Name</h5>
+                            <p class="card-text">
+                                <strong>Adres:</strong> @gym.Address<br />
+                                <strong>Calisma Saatleri:</strong> @gym.OpeningHour.ToString("HH:mm") - @gym.ClosingHour.ToString("HH:mm")
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <a asp-action="SelectTrainer" asp-route-gymId="@gym.Id" class="btn btn-primary w-100">Antrenorleri Gor</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="mt-3">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Ana Sayfaya Don</a>
+    </div>
+</div>

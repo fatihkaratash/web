@@ -18,103 +18,95 @@ public class StatsController : ControllerBase
         _context = context;
     }
 
-    // Dashboard için genel istatistikler
+    // Dashboard icin genel istatistikler
     [HttpGet]
     public async Task<IActionResult> GetStats()
     {
-        // Temel sayılar - LINQ Count() kullanımı
-        var totalMembers = await _context.Members.CountAsync();
-        var totalAppointments = await _context.Appointments.CountAsync();
-        var totalGyms = await _context.Gyms.CountAsync();
-        var totalTrainers = await _context.Trainers.CountAsync(t => t.IsActive);
-
-        // Status bazlı randevu sayıları - Where + Count LINQ
-        var pendingCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Pending);
-        var approvedCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Approved);
-        var completedCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Completed);
-        var canceledCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Canceled);
-
-        // En popüler hizmet - GroupBy + OrderBy LINQ
-        var mostPopularService = await _context.Appointments
-            .GroupBy(a => a.ServiceType.Name)
-            .Select(g => new
-            {
-                serviceName = g.Key,
-                count = g.Count()
-            })
-            .OrderByDescending(x => x.count)
-            .FirstOrDefaultAsync();
-
-        // En çok randevu alan antrenör - Include + GroupBy + OrderBy
-        var topTrainer = await _context.Appointments
-            .Include(a => a.Trainer)
-            .GroupBy(a => a.Trainer.FullName)
-            .Select(g => new
-            {
-                trainerName = g.Key,
-                count = g.Count()
-            })
-            .OrderByDescending(x => x.count)
-            .FirstOrDefaultAsync();
-
-        // Son 7 günlük randevu trendi - Where + GroupBy + Select
-        var weekAgo = DateTime.UtcNow.AddDays(-7);
-        var weeklyTrend = await _context.Appointments
-            .Where(a => a.CreatedAt >= weekAgo)
-            .GroupBy(a => a.CreatedAt.Date)
-            .Select(g => new
-            {
-                date = g.Key.ToString("yyyy-MM-dd"),
-                count = g.Count()
-            })
-            .OrderBy(x => x.date)
-            .ToListAsync();
-
-        return Ok(new
+        try
         {
-            generatedAt = DateTime.UtcNow,
-            summary = new
+            // Temel sayilar - LINQ Count() kullanimi
+            var totalMembers = await _context.Members.CountAsync();
+            var totalAppointments = await _context.Appointments.CountAsync();
+            var totalGyms = await _context.Gyms.CountAsync();
+            var totalTrainers = await _context.Trainers.CountAsync(t => t.IsActive);
+
+            // Status bazli randevu sayilari - Where + Count LINQ
+            var pendingCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Pending);
+            var approvedCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Approved);
+            var completedCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Completed);
+            var canceledCount = await _context.Appointments.CountAsync(a => a.Status == AppointmentStatus.Canceled);
+
+            // En populer hizmet - Once veriyi cek, sonra memory'de grupla
+            var appointments = await _context.Appointments
+                .Include(a => a.ServiceType)
+                .Include(a => a.Trainer)
+                .ToListAsync();
+
+            var mostPopularService = appointments
+                .GroupBy(a => a.ServiceType?.Name ?? "Bilinmiyor")
+                .Select(g => new { serviceName = g.Key, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .FirstOrDefault();
+
+            var topTrainer = appointments
+                .GroupBy(a => a.Trainer?.FullName ?? "Bilinmiyor")
+                .Select(g => new { trainerName = g.Key, count = g.Count() })
+                .OrderByDescending(x => x.count)
+                .FirstOrDefault();
+
+            return Ok(new
             {
-                totalMembers,
-                totalAppointments,
-                totalGyms,
-                totalTrainers
-            },
-            appointments = new
-            {
-                byStatus = new
+                generatedAt = DateTime.UtcNow,
+                linqUsed = "CountAsync, Where, Include, GroupBy, Select, OrderByDescending",
+                summary = new
                 {
-                    pending = pendingCount,
-                    approved = approvedCount,
-                    completed = completedCount,
-                    canceled = canceledCount
+                    totalMembers,
+                    totalAppointments,
+                    totalGyms,
+                    totalTrainers
                 },
-                mostPopularService = mostPopularService?.serviceName ?? "Henüz randevu yok",
-                topTrainer = topTrainer?.trainerName ?? "Henüz randevu yok"
-            },
-            weeklyTrend
-        });
+                appointments = new
+                {
+                    byStatus = new
+                    {
+                        pending = pendingCount,
+                        approved = approvedCount,
+                        completed = completedCount,
+                        canceled = canceledCount
+                    },
+                    mostPopularService = mostPopularService?.serviceName ?? "Henuz randevu yok",
+                    topTrainer = topTrainer?.trainerName ?? "Henuz randevu yok"
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
+        }
     }
 
-    // Salonlara göre antrenör ve randevu sayıları
+    // Salonlara gore antrenor ve randevu sayilari
     [HttpGet("gyms")]
     public async Task<IActionResult> GetGymStats()
     {
-        var gymStats = await _context.Gyms
-            .Select(g => new
-            {
-                id = g.Id,
-                name = g.Name,
-                trainers = _context.Trainers.Count(t => t.GymId == g.Id && t.IsActive),
-                appointments = _context.Appointments.Count(a => a.Trainer.GymId == g.Id)
-            })
-            .OrderByDescending(x => x.appointments)
-            .ToListAsync();
+        var gyms = await _context.Gyms.ToListAsync();
+        var trainers = await _context.Trainers.Where(t => t.IsActive).ToListAsync();
+        var appointments = await _context.Appointments.Include(a => a.Trainer).ToListAsync();
+
+        var gymStats = gyms.Select(g => new
+        {
+            id = g.Id,
+            name = g.Name,
+            trainers = trainers.Count(t => t.GymId == g.Id),
+            appointments = appointments.Count(a => a.Trainer?.GymId == g.Id)
+        })
+        .OrderByDescending(x => x.appointments)
+        .ToList();
 
         return Ok(gymStats);
     }
 
-    // AI önerilerine ait istatistikler (toplam, bugünkü, hedeflere göre dağılım)
+    // AI onerilerine ait istatistikler
     [HttpGet("ai-recommendations")]
     public async Task<IActionResult> GetAiStats()
     {
@@ -122,16 +114,13 @@ public class StatsController : ControllerBase
         var todayRecommendations = await _context.AiRecommendations
             .CountAsync(r => r.CreatedAt.Date == DateTime.UtcNow.Date);
 
-        // Hedef bazlı dağılım - GroupBy kullanımı
-        var goalDistribution = await _context.AiRecommendations
+        // Hedef bazli dagilim - Once veri cek, sonra grupla
+        var recommendations = await _context.AiRecommendations.ToListAsync();
+        var goalDistribution = recommendations
             .GroupBy(r => r.Goal)
-            .Select(g => new
-            {
-                goal = g.Key,
-                count = g.Count()
-            })
+            .Select(g => new { goal = g.Key, count = g.Count() })
             .OrderByDescending(x => x.count)
-            .ToListAsync();
+            .ToList();
 
         return Ok(new
         {

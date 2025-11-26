@@ -95,5 +95,11 @@ namespace FitMindAI.Areas.Admin.Controllers
 
             return View();
         }
+
+        // GET: Admin/Dashboard/ApiTest
+        public IActionResult ApiTest()
+        {
+            return View();
+        }
     }
 }
