@@ -1,133 +1,116 @@
 @model FitMindAI.ViewModels.Trainer.ServiceSelectionViewModel
 @{
-    ViewData["Title"] = "Servis Seçin";
+    ViewData["Title"] = "Hizmet Sec";
+    var tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 }
 
 <div class="container mt-4">
-    <h2>Servis Seçin</h2>
+    <h2>3. Hizmet ve Tarih Secin</h2>
     <hr />
 
-    <div class="alert alert-info">
-        <strong>Antrenör:</strong> @Model.TrainerName<br />
+    <p class="mb-3">
+        <strong>Antrenor:</strong> @Model.TrainerName | 
         <strong>Salon:</strong> @Model.GymName
-        @if (!string.IsNullOrEmpty(Model.TrainerBio))
-        {
-            <br /><strong>Biyografi:</strong> @Model.TrainerBio
-        }
-    </div>
+    </p>
 
     <form asp-action="CreateAppointment" method="post" id="appointmentForm">
         @Html.AntiForgeryToken()
         <input type="hidden" name="trainerId" value="@Model.TrainerId" />
         
-        <div class="list-group mb-4">
-            <h5 class="mb-3">1. Servis Seçin:</h5>
+        <!-- Hizmet Secimi -->
+        <div class="mb-4">
+            <label class="form-label"><strong>Hizmet:</strong></label>
             @foreach (var service in Model.Services)
             {
-                <label class="list-group-item list-group-item-action">
-                    <input type="radio" name="serviceTypeId" value="@service.Id" required class="form-check-input me-2" 
-                           data-duration="@service.DurationInMinutes" />
-                    <div>
-                        <h5 class="mb-1">@service.Name</h5>
-                        @if (!string.IsNullOrEmpty(service.Description))
-                        {
-                            <p class="mb-1 text-muted">@service.Description</p>
-                        }
-                        <small>
-                            <strong>Süre:</strong> @service.DurationInMinutes dakika | 
-                            <strong>Fiyat:</strong> @service.Price.ToString("C2")
-                        </small>
-                    </div>
-                </label>
+                <div class="form-check">
+                    <input type="radio" name="serviceTypeId" value="@service.Id" 
+                           id="service_@service.Id" class="form-check-input" required />
+                    <label class="form-check-label" for="service_@service.Id">
+                        @service.Name (@service.DurationInMinutes dk - @service.Price.ToString("C2"))
+                    </label>
+                </div>
             }
         </div>
 
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">2. Tarih ve Saat Seçin:</h5>
+        <!-- Tarih Secimi -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="appointmentDate" class="form-label"><strong>Tarih:</strong></label>
+                <input type="date" id="appointmentDate" name="appointmentDate" 
+                       class="form-control" min="@tomorrow" value="@tomorrow" required />
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="appointmentDate" class="form-label">Randevu Tarihi</label>
-                        <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" 
-                               min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required />
-                        <small class="text-muted">En erken yarın için randevu alabilirsiniz</small>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="appointmentTime" class="form-label">Randevu Saati</label>
-                        <select id="appointmentTime" name="appointmentTime" class="form-select" required>
-                            <option value="">Önce tarih seçiniz</option>
-                        </select>
-                        <small class="text-muted" id="availabilityHint">Müsait saatler gösterilecek</small>
-                    </div>
-                </div>
+            <div class="col-md-6">
+                <label for="appointmentTime" class="form-label"><strong>Saat:</strong></label>
+                <select id="appointmentTime" name="appointmentTime" class="form-select" required disabled>
+                    <option value="">Once hizmet secin</option>
+                </select>
+                <small id="availabilityHint" class="text-muted"></small>
             </div>
         </div>
 
         <div class="d-flex gap-2">
-            <a asp-action="SelectTrainer" class="btn btn-secondary">Geri</a>
-            <button type="submit" class="btn btn-success btn-lg">
-                <i class="bi bi-check-circle"></i> Randevuyu Onayla
-            </button>
+            <a asp-action="SelectGym" class="btn btn-secondary">Geri</a>
+            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Randevu Olustur</button>
         </div>
     </form>
 </div>
 
 @section Scripts {
-    <script>
-        const trainerId = @Model.TrainerId;
-        let selectedServiceId = null;
+<script>
+    const trainerId = @Model.TrainerId;
+    let selectedServiceId = null;
 
-        // Servis seçimi değiştiğinde
-        document.querySelectorAll('input[name="serviceTypeId"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                selectedServiceId = this.value;
-                const date = document.getElementById('appointmentDate').value;
-                if (date) {
-                    loadAvailableSlots(date);
-                }
-            });
+    // Hizmet secildiginde
+    document.querySelectorAll('input[name="serviceTypeId"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            selectedServiceId = this.value;
+            document.getElementById('appointmentTime').disabled = false;
+            loadSlots();
         });
+    });
 
-        // Tarih değiştiğinde müsait saatleri yükle
-        document.getElementById('appointmentDate').addEventListener('change', function() {
-            const date = this.value;
-            if (selectedServiceId && date) {
-                loadAvailableSlots(date);
-            }
-        });
+    // Tarih degistiginde
+    document.getElementById('appointmentDate').addEventListener('change', loadSlots);
 
-        function loadAvailableSlots(date) {
-            const timeSelect = document.getElementById('appointmentTime');
-            const hint = document.getElementById('availabilityHint');
-            
-            timeSelect.innerHTML = '<option value="">Yükleniyor...</option>';
-            hint.textContent = 'Müsait saatler kontrol ediliyor...';
+    function loadSlots() {
+        const date = document.getElementById('appointmentDate').value;
+        if (!selectedServiceId || !date) return;
 
-            fetch(`/api/trainers/${trainerId}/available-slots?serviceTypeId=${selectedServiceId}&date=${date}`)
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success && result.data && result.data.length > 0) {
-                        timeSelect.innerHTML = '<option value="">Saat seçiniz</option>';
-                        result.data.forEach(slot => {
-                            const time = new Date(slot).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-                            timeSelect.innerHTML += `<option value="${slot}">${time}</option>`;
-                        });
-                        hint.textContent = `${result.data.length} müsait saat bulundu`;
-                        hint.className = 'text-success';
-                    } else {
-                        timeSelect.innerHTML = '<option value="">Müsait saat yok</option>';
-                        hint.textContent = 'Bu tarihte müsait saat bulunmamaktadır';
-                        hint.className = 'text-danger';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    timeSelect.innerHTML = '<option value="">Hata oluştu</option>';
-                    hint.textContent = 'Müsait saatler yüklenirken hata oluştu';
+        const timeSelect = document.getElementById('appointmentTime');
+        const hint = document.getElementById('availabilityHint');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        timeSelect.innerHTML = '<option value="">Yukleniyor...</option>';
+        timeSelect.disabled = true;
+        submitBtn.disabled = true;
+
+        fetch(`/api/trainers/${trainerId}/available-slots?serviceTypeId=${selectedServiceId}&date=${date}`)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success && result.data && result.data.length > 0) {
+                    timeSelect.innerHTML = '<option value="">Saat secin</option>';
+                    result.data.forEach(slot => {
+                        timeSelect.innerHTML += `<option value="${slot.value}">${slot.time}</option>`;
+                    });
+                    hint.textContent = result.data.length + ' musait saat';
+                    hint.className = 'text-success';
+                    timeSelect.disabled = false;
+                } else {
+                    timeSelect.innerHTML = '<option value="">Musait saat yok</option>';
+                    hint.textContent = result.message || 'Bu tarihte musait saat yok';
                     hint.className = 'text-danger';
-                });
-        }
-    </script>
+                }
+            })
+            .catch(error => {
+                timeSelect.innerHTML = '<option value="">Hata</option>';
+                hint.textContent = 'Baglanti hatasi: ' + error.message;
+                hint.className = 'text-danger';
+            });
+    }
+
+    // Saat secildiginde submit butonunu aktif et
+    document.getElementById('appointmentTime').addEventListener('change', function() {
+        document.getElementById('submitBtn').disabled = !this.value;
+    });
+</script>
 }

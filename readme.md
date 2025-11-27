@@ -5,7 +5,7 @@
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=flat&logo=bootstrap)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-**FitMind AI**, ASP.NET Core MVC ile geliştirilmiş, AI destekli akıllı spor salonu yönetim ve randevu sistemidir. Sakarya Üniversitesi Web Programlama dersi kapsamında geliştirilmiştir.
+**FitMind AI**, ASP.NET Core MVC ile geliştirilmiş, AI destekli akıllı spor salonu yönetim ve randevu sistemidir. 
 
 ## 🎯 Özellikler
 
@@ -81,7 +81,7 @@ Tarayıcınızda `https://localhost:5001` adresine gidin.
 ## 👤 Varsayılan Kullanıcılar
 
 ### Admin Hesabı
-- **Email**: `ogrencinumarasi@sakarya.edu.tr`
+- **Email**: `ogrencinumarasi@sakarya.edu.tr` (kendi no'nuz)
 - **Şifre**: `sau`
 
 ### Member Hesabı
@@ -140,10 +140,6 @@ GET  /api/trainers/available          # Müsait antrenörler
 GET  /api/members/{id}/appointments   # Üye randevuları
 ```
 
-## 🤝 Katkıda Bulunma
-
-Bu proje eğitim amaçlıdır. Önerileriniz için issue açabilirsiniz.
-
 ## 📝 Lisans
 
 Bu proje MIT lisansı altında lisanslanmıştır.
@@ -151,19 +147,10 @@ Bu proje MIT lisansı altında lisanslanmıştır.
 ## 👨‍💻 Geliştirici
 
 **Fatih Karataş**  
-Sakarya Üniversitesi - Web Programlama Dersi Projesi
+Sakarya Üniversitesi
 
 - GitHub: [@fatihkaratash](https://github.com/fatihkaratash)
 - Proje Repo: [github.com/fatihkaratash/web](https://github.com/fatihkaratash/web)
 
-## 📚 Dokümantasyon
-
-- [Development Plan](../DEVELOPMENT_PLAN.md) - Detaylı geliştirme planı
-- [Enhancements](../ENHANCEMENTS.md) - Bonus özellikler ve geliştirme fikirleri
-- [Project Rules](../PROJECT_RULES.md) - Proje kuralları ve best practices
-
----
-
-**Not**: Bu proje aktif geliştirme aşamasındadır. Ekran görüntüleri ve ek özellikler eklenecektir.
 
 **Son Güncelleme**: Kasım 2025

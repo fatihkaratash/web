@@ -87,9 +87,14 @@ public class AppointmentService : IAppointmentService
         }
 
         // o gune ait tum randevulari al (iptal ve red edilmemis)
+        // PostgreSQL icin tarih araligi kullaniyoruz
+        var dateStart = date.ToDateTime(TimeOnly.MinValue);
+        var dateEnd = date.AddDays(1).ToDateTime(TimeOnly.MinValue);
+        
         var existingAppointments = await _context.Appointments
             .Where(a => a.TrainerId == trainerId &&
-                        a.StartDateTime.Date == date.ToDateTime(TimeOnly.MinValue) &&
+                        a.StartDateTime >= dateStart &&
+                        a.StartDateTime < dateEnd &&
                         a.Status != AppointmentStatus.Canceled &&
                         a.Status != AppointmentStatus.Rejected)
             .ToListAsync();

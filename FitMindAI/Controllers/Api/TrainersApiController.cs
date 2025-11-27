@@ -134,6 +134,103 @@ public class TrainersApiController : ControllerBase
         }
     }
 
+    // Belirli bir antrenörün belirli tarihteki müsait saatleri
+    [HttpGet("{id}/available-slots")]
+    public async Task<IActionResult> GetAvailableSlots(int id, [FromQuery] int serviceTypeId, [FromQuery] DateTime date)
+    {
+        try
+        {
+            // Gecmis tarih kontrolu
+            if (date.Date < DateTime.Today)
+            {
+                return Ok(new { success = false, message = "Gecmis tarih secilemez", data = new List<DateTime>() });
+            }
+
+            // Bugun secildiyse sadece gelecek saatleri goster
+            var now = DateTime.Now;
+            
+            // Hizmeti al
+            var service = await _context.ServiceTypes.FindAsync(serviceTypeId);
+            if (service == null)
+            {
+                return Ok(new { success = false, message = "Hizmet bulunamadi", data = new List<DateTime>() });
+            }
+
+            // Antrenoru ve salon bilgisini al
+            var trainer = await _context.Trainers
+                .Include(t => t.Gym)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (trainer?.Gym == null)
+            {
+                return Ok(new { success = false, message = "Antrenor veya salon bulunamadi", data = new List<DateTime>() });
+            }
+
+            var duration = service.DurationInMinutes;
+            var dayOfWeek = (int)date.DayOfWeek;
+            var gymOpenTime = trainer.Gym.OpeningHour;
+            var gymCloseTime = trainer.Gym.ClosingHour;
+
+            // Pazar gunu kapali
+            if (dayOfWeek == 0)
+            {
+                return Ok(new { success = false, message = "Pazar gunu kapali", data = new List<DateTime>() });
+            }
+
+            // O gune ait randevulari al (iptal ve red edilmemis)
+            // PostgreSQL UTC gerektirdiği için tarih aralığı kullanıyoruz
+            var dateStart = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
+            var dateEnd = DateTime.SpecifyKind(date.Date.AddDays(1), DateTimeKind.Utc);
+            
+            var existingAppointments = await _context.Appointments
+                .Where(a => a.TrainerId == id &&
+                            a.StartDateTime >= dateStart &&
+                            a.StartDateTime < dateEnd &&
+                            a.Status != Models.AppointmentStatus.Canceled &&
+                            a.Status != Models.AppointmentStatus.Rejected)
+                .ToListAsync();
+
+            var slots = new List<object>();
+            var currentTime = gymOpenTime;
+            var baseDate = date.Date;
+
+            // Salon saatleri boyunca slot uret
+            while (currentTime.AddMinutes(duration) <= gymCloseTime)
+            {
+                var slotDateTime = baseDate.Add(currentTime.ToTimeSpan());
+                var slotEndDateTime = slotDateTime.AddMinutes(duration);
+
+                // Bugun icin gecmis saatleri atla
+                if (date.Date == DateTime.Today && slotDateTime <= now)
+                {
+                    currentTime = currentTime.AddMinutes(30);
+                    continue;
+                }
+
+                // Cakisan randevu var mi kontrol et
+                var hasOverlap = existingAppointments.Any(a =>
+                    a.StartDateTime.TimeOfDay < slotEndDateTime.TimeOfDay &&
+                    a.EndDateTime.TimeOfDay > slotDateTime.TimeOfDay);
+
+                if (!hasOverlap)
+                {
+                    slots.Add(new { 
+                        time = slotDateTime.ToString("HH:mm"),
+                        value = slotDateTime.ToString("yyyy-MM-ddTHH:mm:ss")
+                    });
+                }
+
+                currentTime = currentTime.AddMinutes(30);
+            }
+
+            return Ok(new { success = true, message = $"{slots.Count} musait saat bulundu", data = slots });
+        }
+        catch (Exception ex)
+        {
+            return Ok(new { success = false, message = "Hata: " + ex.Message, data = new List<DateTime>() });
+        }
+    }
+
     // Belirli bir antrenörün randevuları (tarih filtreleme ile)
     [HttpGet("{id}/appointments")]
     public async Task<IActionResult> GetAppointments(int id, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
