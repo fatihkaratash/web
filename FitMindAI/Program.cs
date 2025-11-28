@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using FitMindAI.Data;
 using FitMindAI.Services;
 
-// PostgreSQL timestamp uyumlulugu icin
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);

@@ -7,7 +7,7 @@ namespace FitMindAI.Services;
 public class AppointmentService : IAppointmentService
 {
     private readonly ApplicationDbContext _context;
-    private const int SlotIntervalMinutes = 30; // 30 dakika aralikla slot uretimi
+    private const int SlotIntervalMinutes = 30;
 
     public AppointmentService(ApplicationDbContext context)
     {
