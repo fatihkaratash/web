@@ -8,7 +8,7 @@ public class AiRecommendation
     public int MemberId { get; set; }
     public Member Member { get; set; } = null!;
     
-    // Input özet metni (JSON string: boy, kilo, yaş, hedef, vs.)
+ 
     public string InputSummary { get; set; } = string.Empty;
     
     // Gemini'den gelen full cevap
