@@ -30,7 +30,7 @@ public class GeminiService : IAiService
     {
         try
         {
-            // Gemini config
+       
             var apiKey = _configuration["Gemini:ApiKey"];
             var model = _configuration["Gemini:Model"] ?? "gemini-2.5-flash";
 
@@ -39,10 +39,10 @@ public class GeminiService : IAiService
                 throw new InvalidOperationException("Gemini API key bulunamadı. User Secrets yapılandırılmış mı?");
             }
 
-            // Prompt oluştur
+        
             var prompt = BuildPrompt(heightCm, weightKg, age, gender, goal, experience, frequency, equipment, notes);
 
-            // Gemini istek ayarları - kısa ve öz yanıt için optimize edildi
+            
             var requestBody = new
             {
                 contents = new[]
@@ -58,8 +58,8 @@ public class GeminiService : IAiService
                 generationConfig = new
                 {
                     candidateCount = 1,
-                    maxOutputTokens = 2000, // Programın kesilmemesi için artırıldı
-                    temperature = 0.4,      // Daha tutarlı ve formatlı yanıt için
+                    maxOutputTokens = 2000, 
+                    temperature = 0.4,      
                     topP = 0.9,
                     topK = 20
                 },
