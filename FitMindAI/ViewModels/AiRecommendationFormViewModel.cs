@@ -43,7 +43,6 @@ public class AiRecommendationFormViewModel
     [StringLength(500, ErrorMessage = "Ek notlar en fazla 500 karakter olabilir")]
     public string? Notes { get; set; }
 
-    // API response için
     public string? AiResponse { get; set; }
     public bool IsSuccess { get; set; }
 }
