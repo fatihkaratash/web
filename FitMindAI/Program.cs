@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI; // needed for AddDefaultIdentity extensions
 using Microsoft.EntityFrameworkCore;
 using FitMindAI.Data;
 using FitMindAI.Services;
