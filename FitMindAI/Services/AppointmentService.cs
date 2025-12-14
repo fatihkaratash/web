@@ -227,7 +227,6 @@ public class AppointmentService : IAppointmentService
         if (appointment == null)
             return false;
 
-        // sadece gelecek tarihli ve henuz iptal edilmemis randevular iptal edilebilir
         if (appointment.StartDateTime <= DateTime.Now ||
             appointment.Status == AppointmentStatus.Canceled ||
             appointment.Status == AppointmentStatus.Rejected)
