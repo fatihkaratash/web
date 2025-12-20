@@ -9,229 +9,229 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FitMindAI
 build_property.RootNamespace = FitMindAI
-build_property.ProjectDir = C:\Projects\web\fitmindai\
+build_property.ProjectDir = C:\Projects\web\FitMindAI\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Projects\web\fitmindai
+build_property.MSBuildProjectDirectory = C:\Projects\web\FitMindAI
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/AiRecommendations/Details.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/AiRecommendations/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWlSZWNvbW1lbmRhdGlvbnNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/AiRecommendations/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/AiRecommendations/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWlSZWNvbW1lbmRhdGlvbnNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Appointment/Details.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Appointment/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXBwb2ludG1lbnRcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Appointment/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Appointment/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQXBwb2ludG1lbnRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Dashboard/ApiTest.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Dashboard/ApiTest.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRGFzaGJvYXJkXEFwaVRlc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Dashboard/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Dashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Gym/Create.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Gym/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcR3ltXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Gym/Delete.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Gym/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcR3ltXERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Gym/Details.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Gym/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcR3ltXERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Gym/Edit.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Gym/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcR3ltXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Gym/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Gym/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcR3ltXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/ServiceType/Create.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/ServiceType/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2VydmljZVR5cGVcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/ServiceType/Delete.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/ServiceType/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2VydmljZVR5cGVcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/ServiceType/Details.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/ServiceType/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2VydmljZVR5cGVcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/ServiceType/Edit.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/ServiceType/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2VydmljZVR5cGVcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/ServiceType/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/ServiceType/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2VydmljZVR5cGVcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Specialty/Create.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Specialty/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3BlY2lhbHR5XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Specialty/Delete.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Specialty/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3BlY2lhbHR5XERlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Specialty/Details.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Specialty/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3BlY2lhbHR5XERldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Specialty/Edit.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Specialty/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3BlY2lhbHR5XEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Specialty/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Specialty/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU3BlY2lhbHR5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/TrainerAvailability/Create.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/TrainerAvailability/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lckF2YWlsYWJpbGl0eVxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/TrainerAvailability/Delete.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/TrainerAvailability/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lckF2YWlsYWJpbGl0eVxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/TrainerAvailability/Details.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/TrainerAvailability/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lckF2YWlsYWJpbGl0eVxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/TrainerAvailability/Edit.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/TrainerAvailability/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lckF2YWlsYWJpbGl0eVxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/TrainerAvailability/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/TrainerAvailability/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lckF2YWlsYWJpbGl0eVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Trainer/Create.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Trainer/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lclxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Trainer/Delete.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Trainer/Delete.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lclxEZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Trainer/Details.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Trainer/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lclxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Trainer/Edit.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Trainer/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lclxFZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/Trainer/Index.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/Trainer/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcVHJhaW5lclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/_ViewImports.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Admin/Views/_ViewStart.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Admin/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Members/Pages/Account/Login.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Members/Pages/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcTWVtYmVyc1xQYWdlc1xBY2NvdW50XExvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Members/Pages/Account/Logout.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Members/Pages/Account/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcTWVtYmVyc1xQYWdlc1xBY2NvdW50XExvZ291dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Members/Pages/Account/Register.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Members/Pages/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcTWVtYmVyc1xQYWdlc1xBY2NvdW50XFJlZ2lzdGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Members/Pages/_ViewImports.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Members/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcTWVtYmVyc1xQYWdlc1xfVmlld0ltcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Areas/Members/Pages/_ViewStart.cshtml]
+[C:/Projects/web/FitMindAI/Areas/Members/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcTWVtYmVyc1xQYWdlc1xfVmlld1N0YXJ0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/AiRecommendation/Create.cshtml]
+[C:/Projects/web/FitMindAI/Views/AiRecommendation/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWlSZWNvbW1lbmRhdGlvblxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/AiRecommendation/Details.cshtml]
+[C:/Projects/web/FitMindAI/Views/AiRecommendation/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWlSZWNvbW1lbmRhdGlvblxEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/AiRecommendation/MyRecommendations.cshtml]
+[C:/Projects/web/FitMindAI/Views/AiRecommendation/MyRecommendations.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWlSZWNvbW1lbmRhdGlvblxNeVJlY29tbWVuZGF0aW9ucy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Appointment/Confirm.cshtml]
+[C:/Projects/web/FitMindAI/Views/Appointment/Confirm.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcQ29uZmlybS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Appointment/MyAppointments.cshtml]
+[C:/Projects/web/FitMindAI/Views/Appointment/MyAppointments.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcTXlBcHBvaW50bWVudHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Appointment/SelectDateTime.cshtml]
+[C:/Projects/web/FitMindAI/Views/Appointment/SelectDateTime.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcU2VsZWN0RGF0ZVRpbWUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Appointment/SelectGym.cshtml]
+[C:/Projects/web/FitMindAI/Views/Appointment/SelectGym.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcU2VsZWN0R3ltLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Appointment/SelectService.cshtml]
+[C:/Projects/web/FitMindAI/Views/Appointment/SelectService.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcU2VsZWN0U2VydmljZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Appointment/SelectTrainer.cshtml]
+[C:/Projects/web/FitMindAI/Views/Appointment/SelectTrainer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcU2VsZWN0VHJhaW5lci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Home/Index.cshtml]
+[C:/Projects/web/FitMindAI/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Home/Privacy.cshtml]
+[C:/Projects/web/FitMindAI/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Shared/Error.cshtml]
+[C:/Projects/web/FitMindAI/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Shared/_LoginPartial.cshtml]
+[C:/Projects/web/FitMindAI/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Projects/web/FitMindAI/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/_ViewImports.cshtml]
+[C:/Projects/web/FitMindAI/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/_ViewStart.cshtml]
+[C:/Projects/web/FitMindAI/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Projects/web/fitmindai/Views/Shared/_Layout.cshtml]
+[C:/Projects/web/FitMindAI/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-avaddq9w9j

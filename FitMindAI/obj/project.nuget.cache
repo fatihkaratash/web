@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pici1J5yWW5EVLZk/nysXI2qszwyEUOCcw1WIw7NvKqIIJxJttqx1yBf9oNhmNVKAWNG7m9iPTLInp9t5cMCng==",
+  "dgSpecHash": "uTmewZhvL8geta9hbNOYmZsmXhgW3w4DKn42udIeHLTxmX4dATnlRgxohEI4uHwPOHIqoofIUoiLtf6ac2wWaw==",
   "success": true,
-  "projectFilePath": "C:\\Projects\\web\\fitmindai\\FitMindAI.csproj",
+  "projectFilePath": "C:\\Projects\\web\\FitMindAI\\FitMindAI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kzkst\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\kzkst\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\7.0.11\\microsoft.aspnetcore.cryptography.internal.7.0.11.nupkg.sha512",
