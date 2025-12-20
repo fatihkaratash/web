@@ -1,0 +1,165 @@
+@{
+    ViewData["Title"] = "REST API Test";
+}
+
+<div class="container mt-4">
+    <h2>REST API Test</h2>
+    <p class="text-muted">API uzerinden LINQ sorgulari ile veri cekme</p>
+    <hr />
+
+    <!-- API Butonlari -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Tum Antrenorler</h6>
+                    <p class="card-text small text-muted">Aktif antrenorleri salon ve uzmanlik bilgileriyle getirir</p>
+                    <code class="d-block mb-2">GET /api/trainers</code>
+                    <button type="button" class="btn btn-primary w-100" onclick="loadTrainers()">
+                        Calistir
+                    </button>
+                </div>
+                <div class="card-footer bg-light">
+                    <small><strong>LINQ:</strong> Include, ThenInclude, Where, Select, ToListAsync</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Musait Antrenorler</h6>
+                    <p class="card-text small text-muted">Belirli tarihte calisma saati olan antrenorleri getirir</p>
+                    <code class="d-block mb-2">GET /api/trainers/available?date=X</code>
+                    <div class="input-group">
+                        <input type="date" id="availableDate" class="form-control" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" />
+                        <button type="button" class="btn btn-success" onclick="loadAvailableTrainers()">
+                            Calistir
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <small><strong>LINQ:</strong> Where, Select, Distinct, ToListAsync</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Dashboard Istatistikleri</h6>
+                    <p class="card-text small text-muted">Uye, randevu ve hizmet istatistiklerini getirir</p>
+                    <code class="d-block mb-2">GET /api/stats</code>
+                    <button type="button" class="btn btn-info w-100" onclick="loadStats()">
+                        Calistir
+                    </button>
+                </div>
+                <div class="card-footer bg-light">
+                    <small><strong>LINQ:</strong> CountAsync, GroupBy, OrderByDescending, FirstOrDefault</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sonuc Alani -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>API Yaniti (JSON)</span>
+            <button class="btn btn-sm btn-outline-secondary" onclick="clearResult()">Temizle</button>
+        </div>
+        <div class="card-body p-0">
+            <div class="bg-dark text-light p-3" style="min-height: 300px; max-height: 500px; overflow-y: auto;">
+                <pre id="apiResult" style="margin: 0; white-space: pre-wrap; font-size: 0.85rem;">Bir buton tiklayin...</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-secondary">Dashboard'a Don</a>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function clearResult() {
+        document.getElementById('apiResult').textContent = 'Bir buton tiklayin...';
+    }
+
+    // Tum antrenorleri getir
+    function loadTrainers() {
+        document.getElementById('apiResult').textContent = 'Yukleniyor...';
+        
+        fetch('/api/trainers', { credentials: 'include' })
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                var result = "// ===== TUM ANTRENORLER =====\n";
+                result += "// Endpoint: GET /api/trainers\n";
+                result += "// LINQ Sorgusu:\n";
+                result += "// _context.Trainers\n";
+                result += "//     .Include(t => t.Gym)\n";
+                result += "//     .Include(t => t.TrainerSpecialties).ThenInclude(ts => ts.Specialty)\n";
+                result += "//     .Where(t => t.IsActive)\n";
+                result += "//     .Select(t => new { ... })\n";
+                result += "//     .ToListAsync()\n\n";
+                result += JSON.stringify(data, null, 2);
+                document.getElementById('apiResult').textContent = result;
+            })
+            .catch(error => {
+                document.getElementById('apiResult').textContent = 'Hata: ' + error.message;
+            });
+    }
+
+    // Belirli tarihte musait antrenorleri getir
+    function loadAvailableTrainers() {
+        var date = document.getElementById('availableDate').value;
+        document.getElementById('apiResult').textContent = 'Yukleniyor...';
+        
+        fetch('/api/trainers/available?date=' + date, { credentials: 'include' })
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                var result = "// ===== MUSAIT ANTRENORLER =====\n";
+                result += "// Endpoint: GET /api/trainers/available?date=" + date + "\n";
+                result += "// LINQ Sorgusu:\n";
+                result += "// _context.TrainerAvailabilities\n";
+                result += "//     .Where(ta => ta.DayOfWeek == dayOfWeek)\n";
+                result += "//     .Select(ta => ta.TrainerId)\n";
+                result += "//     .Distinct()\n";
+                result += "//     .ToListAsync()\n\n";
+                result += JSON.stringify(data, null, 2);
+                document.getElementById('apiResult').textContent = result;
+            })
+            .catch(error => {
+                document.getElementById('apiResult').textContent = 'Hata: ' + error.message;
+            });
+    }
+
+    // Istatistikleri getir
+    function loadStats() {
+        document.getElementById('apiResult').textContent = 'Yukleniyor...';
+        
+        fetch('/api/stats', { credentials: 'include' })
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.json();
+            })
+            .then(data => {
+                var result = "// ===== DASHBOARD ISTATISTIKLERI =====\n";
+                result += "// Endpoint: GET /api/stats\n";
+                result += "// LINQ Sorgulari:\n";
+                result += "// await _context.Members.CountAsync()\n";
+                result += "// await _context.Appointments.CountAsync()\n";
+                result += "// await _context.Appointments.Where(a => a.StartDateTime.Date == today).CountAsync()\n";
+                result += "// appointments.GroupBy(a => a.ServiceType.Name).OrderByDescending(g => g.Count()).First()\n\n";
+                result += JSON.stringify(data, null, 2);
+                document.getElementById('apiResult').textContent = result;
+            })
+            .catch(error => {
+                document.getElementById('apiResult').textContent = 'Hata: ' + error.message;
+            });
+    }
+</script>
+}

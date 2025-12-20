@@ -1,0 +1,58 @@
+@model FitMindAI.Models.Gym
+@{
+    ViewData["Title"] = "Salon Detayları";
+}
+
+<div class="container mt-4">
+    <h2>Salon Detayları</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <dl class="row">
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Name)</dt>
+                <dd class="col-sm-8">@Model.Name</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Address)</dt>
+                <dd class="col-sm-8">@Model.Address</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Phone)</dt>
+                <dd class="col-sm-8">@(Model.Phone ?? "-")</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.OpeningHour)</dt>
+                <dd class="col-sm-8">@Model.OpeningHour.ToString("HH:mm")</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.ClosingHour)</dt>
+                <dd class="col-sm-8">@Model.ClosingHour.ToString("HH:mm")</dd>
+            </dl>
+
+            @if (Model.Trainers.Any())
+            {
+                <h4 class="mt-4">Bu Salondaki Antrenörler (@Model.Trainers.Count)</h4>
+                <ul class="list-group">
+                    @foreach (var trainer in Model.Trainers)
+                    {
+                        <li class="list-group-item">
+                            @trainer.FullName
+                            @if (!trainer.IsActive)
+                            {
+                                <span class="badge bg-secondary">Pasif</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-info mt-4">
+                    Bu salonda henüz antrenör bulunmuyor.
+                </div>
+            }
+
+            <div class="mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+                <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+            </div>
+        </div>
+    </div>
+</div>

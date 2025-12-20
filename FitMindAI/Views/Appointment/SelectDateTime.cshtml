@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "Tarih ve Saat Secin";
+    var trainer = ViewBag.Trainer as FitMindAI.Models.Trainer;
+    var service = ViewBag.Service as FitMindAI.Models.ServiceType;
+    var trainerId = ViewBag.TrainerId as int?;
+    var serviceTypeId = ViewBag.ServiceTypeId as int?;
+    var slots = ViewBag.Slots as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+    var selectedDate = ViewBag.SelectedDate as string;
+    var tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+}
+
+<div class="container mt-4">
+    <h2>3. Tarih ve Saat Secin</h2>
+    <hr />
+
+    <div class="alert alert-info">
+        <strong>Antrenor:</strong> @trainer?.FullName<br />
+        <strong>Salon:</strong> @(trainer?.Gym?.Name ?? "Belirtilmemis")<br />
+        <strong>Hizmet:</strong> @service?.Name (@service?.DurationInMinutes dk, @service?.Price.ToString("C2"))
+    </div>
+
+    <!-- Tarih Secimi -->
+    <form asp-action="SelectDateTime" method="post">
+        <input type="hidden" name="trainerId" value="@trainerId" />
+        <input type="hidden" name="serviceTypeId" value="@serviceTypeId" />
+        
+        <div class="mb-3">
+            <label class="form-label">Tarih Secin</label>
+            <input type="date" name="selectedDate" class="form-control" 
+                   value="@(selectedDate ?? tomorrow)" 
+                   min="@tomorrow" 
+                   required />
+            <small class="text-muted">En erken yarin icin randevu alabilirsiniz</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary mb-4">Musait Saatleri Goster</button>
+    </form>
+
+    <!-- Saat Secimi (Tarih secildikten sonra gorunur) -->
+    @if (slots != null && slots.Any())
+    {
+        <form asp-action="Confirm" method="get">
+            <input type="hidden" name="trainerId" value="@trainerId" />
+            <input type="hidden" name="serviceTypeId" value="@serviceTypeId" />
+            
+            <div class="mb-3">
+                <label class="form-label">Musait Saatler</label>
+                <select name="startDateTime" class="form-select" required>
+                    <option value="">Saat secin...</option>
+                    @foreach (var slot in slots)
+                    {
+                        <option value="@slot.Value">@slot.Text</option>
+                    }
+                </select>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a asp-action="SelectService" asp-route-trainerId="@trainerId" class="btn btn-secondary">Geri</a>
+                <button type="submit" class="btn btn-primary">Ileri</button>
+            </div>
+        </form>
+    }
+    else if (selectedDate != null)
+    {
+        <div class="alert alert-warning">
+            Sectiginiz tarih icin musait saat bulunamadi. Lutfen baska bir tarih deneyin.
+        </div>
+        <a asp-action="SelectService" asp-route-trainerId="@trainerId" class="btn btn-secondary">Geri</a>
+    }
+    else
+    {
+        <a asp-action="SelectService" asp-route-trainerId="@trainerId" class="btn btn-secondary">Geri</a>
+    }
+</div>

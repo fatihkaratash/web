@@ -1,0 +1,24 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <span class="nav-link text-white">Merhaba @User.Identity?.Name!</span>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Members" asp-page="/Account/Logout">Çıkış</a>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Members" asp-page="/Account/Register">Kayıt Ol</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-area="Members" asp-page="/Account/Login">Giriş</a>
+    </li>
+}
+</ul>

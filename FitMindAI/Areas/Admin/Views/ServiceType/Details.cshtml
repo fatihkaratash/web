@@ -1,0 +1,39 @@
+@model FitMindAI.Models.ServiceType
+@{
+    ViewData["Title"] = "Hizmet Detayları";
+}
+
+<div class="container mt-4">
+    <h2>Hizmet Detayları</h2>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Name)</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.DurationInMinutes)</dt>
+        <dd class="col-sm-9">@Model.DurationInMinutes dakika</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Price)</dt>
+        <dd class="col-sm-9">@Model.Price.ToString("N2") ₺</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Description)</dt>
+        <dd class="col-sm-9">@(Model.Description ?? "-")</dd>
+    </dl>
+
+    @if (Model.TrainerServices.Any())
+    {
+        <h4 class="mt-4">Bu Hizmeti Veren Antrenörler (@Model.TrainerServices.Count)</h4>
+        <ul class="list-group">
+            @foreach (var ts in Model.TrainerServices)
+            {
+                <li class="list-group-item">@ts.Trainer.FullName</li>
+            }
+        </ul>
+    }
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+        <a asp-action="Index" class="btn btn-secondary">Geri Dön</a>
+    </div>
+</div>

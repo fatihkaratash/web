@@ -1,0 +1,54 @@
+@model FitMindAI.ViewModels.AiRecommendationDetailViewModel
+@{
+    ViewData["Title"] = "AI Öneri Detayı";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>AI Öneri Detayı</h2>
+                <a asp-action="MyRecommendations" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Geri Dön
+                </a>
+            </div>
+            <hr />
+
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">@Model.Goal</h5>
+                        <small>@Model.CreatedAt.ToString("dd MMMM yyyy HH:mm")</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="text-muted">Bilgileriniz:</h6>
+                        <div class="bg-light p-3 rounded">
+                            <pre style="margin: 0; font-size: 0.9rem; white-space: pre-wrap;">@Model.InputSummary</pre>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="mt-3">
+                        <h6 class="mb-3">Antrenman Programınız</h6>
+                        <div class="bg-light p-3 rounded" style="white-space: pre-line; line-height: 1.7;">
+                            @Model.OutputText
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="MyRecommendations" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Geri
+                        </a>
+                        <a asp-action="Create" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Yeni Program
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

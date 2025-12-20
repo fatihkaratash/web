@@ -1,0 +1,266 @@
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<div class="container mt-4">
+    <h2>Admin Panel</h2>
+    <p class="text-muted">Sistem ozeti ve istatistikler</p>
+    <hr />
+
+    <!-- Basit istatistikler - tablo seklinde -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h5>Genel Bilgiler</h5>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Toplam Uye</td>
+                    <td><strong>@ViewBag.TotalMembers</strong></td>
+                </tr>
+                <tr>
+                    <td>Toplam Randevu</td>
+                    <td><strong>@ViewBag.TotalAppointments</strong></td>
+                </tr>
+                <tr>
+                    <td>Bugunun Randevulari</td>
+                    <td><strong>@ViewBag.TodayAppointments</strong></td>
+                </tr>
+                <tr>
+                    <td>Bekleyen Randevular</td>
+                    <td><strong>@ViewBag.PendingAppointments</strong></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h5>One Cikanlar</h5>
+            <table class="table table-bordered">
+                <tr>
+                    <td>En Populer Hizmet</td>
+                    <td>
+                        @if (ViewBag.MostPopularService != null)
+                        {
+                            var service = ViewBag.MostPopularService;
+                            <strong>@service.ServiceType.Name</strong>
+                            <text> - </text>@service.Count
+                        }
+                        else
+                        {
+                            <span class="text-muted">Veri yok</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>En Cok Randevu Alan</td>
+                    <td>
+                        @if (ViewBag.TopTrainer != null)
+                        {
+                            var trainer = ViewBag.TopTrainer;
+                            <strong>@trainer.Trainer.FullName</strong>
+                            <text> - </text>@trainer.Count
+                        }
+                        else
+                        {
+                            <span class="text-muted">Veri yok</span>
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- Salon Kartları -->
+    <div class="row mb-4">
+        <div class="col-12 mb-3">
+            <h3><i class="bi bi-building"></i> Salonlarım</h3>
+            <p class="text-muted">Salonları yönet, antrenörleri ve müsaitlik takvimini kontrol et</p>
+        </div>
+        
+        @if (ViewBag.Gyms != null && ViewBag.Gyms.Count > 0)
+        {
+            @foreach (var gymData in ViewBag.Gyms)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100 hover-lift">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="card-title mb-1">
+                                        <i class="bi bi-building-fill text-primary"></i>
+                                        @gymData.Gym.Name
+                                    </h5>
+                                    <p class="text-muted small mb-0">
+                                        <i class="bi bi-geo-alt"></i> @gymData.Gym.Address
+                                    </p>
+                                </div>
+                                <span class="badge bg-primary">Aktif</span>
+                            </div>
+
+                            <!-- İstatistikler -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2 text-center">
+                                        <div class="fs-4 fw-bold text-success">@gymData.TrainerCount</div>
+                                        <small class="text-muted">Aktif Antrenör</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2 text-center">
+                                        <div class="fs-4 fw-bold text-info">@gymData.AppointmentCount</div>
+                                        <small class="text-muted">Toplam Randevu</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Çalışma Saatleri -->
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <i class="bi bi-clock"></i>
+                                    @gymData.Gym.OpeningHour.ToString(@"hh\:mm") - @gymData.Gym.ClosingHour.ToString(@"hh\:mm")
+                                </small>
+                            </div>
+
+                            <!-- Aksiyonlar -->
+                            <div class="d-grid gap-2">
+                                <a asp-area="Admin" asp-controller="Trainer" asp-action="Index" asp-route-gymId="@gymData.Gym.Id" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-people"></i> Antrenörleri Gör
+                                </a>
+                                <div class="btn-group" role="group">
+                                    <a asp-area="Admin" asp-controller="Gym" asp-action="Edit" asp-route-id="@gymData.Gym.Id" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-pencil"></i> Düzenle
+                                    </a>
+                                    <a asp-area="Admin" asp-controller="Gym" asp-action="Details" asp-route-id="@gymData.Gym.Id" 
+                                       class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-info-circle"></i> Detay
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    Henüz salon eklenmemiş. 
+                    <a asp-area="Admin" asp-controller="Gym" asp-action="Create" class="alert-link">Yeni salon ekle</a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Son Randevular -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history text-primary"></i> Son Randevular
+                    </h5>
+                    <a asp-area="Admin" asp-controller="Appointment" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                        Tümünü Gör <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    @if (ViewBag.RecentAppointments != null && ViewBag.RecentAppointments.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Üye</th>
+                                        <th>Antrenör</th>
+                                        <th>Hizmet</th>
+                                        <th>Tarih & Saat</th>
+                                        <th>Durum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in ViewBag.RecentAppointments)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@appointment.Member.FullName</strong>
+                                            </td>
+                                            <td>@appointment.Trainer.FullName</td>
+                                            <td>
+                                                @appointment.ServiceType.Name
+                                                <small class="text-muted">(@appointment.ServiceType.DurationInMinutes dk)</small>
+                                            </td>
+                                            <td>
+                                                <i class="bi bi-calendar3"></i> @appointment.StartDateTime.ToString("dd.MM.yyyy")
+                                                <br>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-clock"></i> @appointment.StartDateTime.ToString("HH:mm")
+                                                </small>
+                                            </td>
+                                            <td>
+                                                @switch (appointment.Status)
+                                                {
+                                                    case FitMindAI.Models.AppointmentStatus.Pending:
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="bi bi-clock"></i> Bekliyor
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Approved:
+                                                        <span class="badge bg-success">
+                                                            <i class="bi bi-check-circle"></i> Onaylandı
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Rejected:
+                                                        <span class="badge bg-danger">
+                                                            <i class="bi bi-x-circle"></i> Reddedildi
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Canceled:
+                                                        <span class="badge bg-secondary">
+                                                            <i class="bi bi-slash-circle"></i> İptal Edildi
+                                                        </span>
+                                                        break;
+                                                    case FitMindAI.Models.AppointmentStatus.Completed:
+                                                        <span class="badge bg-info">
+                                                            <i class="bi bi-check2-all"></i> Tamamlandı
+                                                        </span>
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-4 text-center text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                            <p class="mb-0">Henüz randevu kaydı yok.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REST API Test Linki -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">REST API Test</h5>
+                        <small class="text-muted">API uzerinden LINQ sorgulari ile veri cekme ornekleri</small>
+                    </div>
+                    <a asp-action="ApiTest" class="btn btn-outline-primary">
+                        API Test Sayfasina Git
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

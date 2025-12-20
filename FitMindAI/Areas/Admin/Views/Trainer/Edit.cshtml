@@ -1,0 +1,162 @@
+@model FitMindAI.Models.Trainer
+@{
+    ViewData["Title"] = "Antrenor Duzenle";
+    var specialties = ViewBag.Specialties as List<FitMindAI.Models.Specialty>;
+    var serviceTypes = ViewBag.ServiceTypes as List<FitMindAI.Models.ServiceType>;
+    var selectedSpecialties = ViewBag.SelectedSpecialties as List<int> ?? new List<int>();
+    var selectedServices = ViewBag.SelectedServices as List<int> ?? new List<int>();
+    var availabilities = ViewBag.Availabilities as List<FitMindAI.Models.TrainerAvailability> ?? new List<FitMindAI.Models.TrainerAvailability>();
+    var gymOpeningHour = ViewBag.GymOpeningHour as TimeOnly? ?? new TimeOnly(9, 0);
+    var gymClosingHour = ViewBag.GymClosingHour as TimeOnly? ?? new TimeOnly(21, 0);
+    
+    string[] gunler = { "Pazar", "Pazartesi", "Sali", "Carsamba", "Persembe", "Cuma", "Cumartesi" };
+}
+
+<div class="container mt-4">
+    <h2>Antrenör Düzenle</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-10">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+                
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label"></label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GymId" class="form-label"></label>
+                    <select asp-for="GymId" asp-items="ViewBag.Gyms" class="form-select">
+                        <option value="">-- Salon Seçin --</option>
+                    </select>
+                    <span asp-validation-for="GymId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Bio" class="form-label"></label>
+                    <textarea asp-for="Bio" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Bio" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+                </div>
+
+                <!-- Uzmanlıklar -->
+                <div class="mb-3">
+                    <label class="form-label">Uzmanlıklar</label>
+                    <div class="border rounded p-3">
+                        @if (specialties != null && specialties.Any())
+                        {
+                            @foreach (var specialty in specialties)
+                            {
+                                var isChecked = selectedSpecialties.Contains(specialty.Id);
+                                <div class="form-check">
+                                    <input type="checkbox" name="selectedSpecialties" value="@specialty.Id" 
+                                           class="form-check-input" id="specialty_@specialty.Id" 
+                                           @(isChecked ? "checked" : "") />
+                                    <label class="form-check-label" for="specialty_@specialty.Id">
+                                        @specialty.Name
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Hizmetler -->
+                <div class="mb-3">
+                    <label class="form-label">Verdigi Hizmetler</label>
+                    <div class="border rounded p-3">
+                        @if (serviceTypes != null && serviceTypes.Any())
+                        {
+                            @foreach (var service in serviceTypes)
+                            {
+                                var isChecked = selectedServices.Contains(service.Id);
+                                <div class="form-check">
+                                    <input type="checkbox" name="selectedServices" value="@service.Id" 
+                                           class="form-check-input" id="service_@service.Id" 
+                                           @(isChecked ? "checked" : "") />
+                                    <label class="form-check-label" for="service_@service.Id">
+                                        @service.Name (@service.DurationInMinutes dk - @service.Price.ToString("N2") TL)
+                                    </label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Musaitlik Takvimi -->
+                <div class="mb-3">
+                    <label class="form-label">Haftalik Calisma Saatleri</label>
+                    <small class="d-block text-muted mb-2">Salon saatleri: @gymOpeningHour.ToString("HH:mm") - @gymClosingHour.ToString("HH:mm")</small>
+                    <div class="border rounded p-3">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Gun</th>
+                                    <th>Baslangic</th>
+                                    <th>Bitis</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int day = 1; day <= 6; day++) // Pazartesi-Cumartesi
+                                {
+                                    var existing = availabilities.FirstOrDefault(a => a.DayOfWeek == day);
+                                    var startVal = existing?.StartTime.ToString("HH:mm") ?? gymOpeningHour.ToString("HH:mm");
+                                    var endVal = existing?.EndTime.ToString("HH:mm") ?? gymClosingHour.ToString("HH:mm");
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" name="availabilityDays" value="@day" />
+                                            @gunler[day]
+                                        </td>
+                                        <td>
+                                            <input type="time" name="availabilityStart" class="form-control form-control-sm" value="@startVal" />
+                                        </td>
+                                        <td>
+                                            <input type="time" name="availabilityEnd" class="form-control form-control-sm" value="@endVal" />
+                                        </td>
+                                    </tr>
+                                }
+                                @{
+                                    // Pazar (0)
+                                    var pazarExisting = availabilities.FirstOrDefault(a => a.DayOfWeek == 0);
+                                    var pazarStart = pazarExisting?.StartTime.ToString("HH:mm") ?? "";
+                                    var pazarEnd = pazarExisting?.EndTime.ToString("HH:mm") ?? "";
+                                }
+                                <tr class="table-secondary">
+                                    <td>
+                                        <input type="hidden" name="availabilityDays" value="0" />
+                                        @gunler[0] <small class="text-muted">(opsiyonel)</small>
+                                    </td>
+                                    <td>
+                                        <input type="time" name="availabilityStart" class="form-control form-control-sm" value="@pazarStart" />
+                                    </td>
+                                    <td>
+                                        <input type="time" name="availabilityEnd" class="form-control form-control-sm" value="@pazarEnd" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Guncelle</button>
+                    <a asp-action="Index" class="btn btn-secondary">Iptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

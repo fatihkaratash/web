@@ -1,0 +1,39 @@
+@model FitMindAI.Models.Trainer
+@{
+    ViewData["Title"] = "Antrenör Sil";
+}
+
+<div class="container mt-4">
+    <h2>Antrenör Sil</h2>
+    <hr />
+
+    <div class="alert alert-warning">
+        <h5>Bu antrenörü silmek istediğinizden emin misiniz?</h5>
+    </div>
+
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.FullName)</dt>
+        <dd class="col-sm-9">@Model.FullName</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.Gym)</dt>
+        <dd class="col-sm-10">@(Model.Gym?.Name ?? "Belirtilmemiş")</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(m => m.IsActive)</dt>
+        <dd class="col-sm-9">
+            @if (Model.IsActive)
+            {
+                <span class="badge bg-success">Aktif</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Pasif</span>
+            }
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Sil</button>
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </form>
+</div>

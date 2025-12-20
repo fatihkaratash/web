@@ -1,0 +1,73 @@
+@model FitMindAI.ViewModels.AiRecommendationDetailViewModel
+@{
+    ViewData["Title"] = "AI Öneri Detayı";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>AI Öneri Detayı</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Geri Dön
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Genel Bilgiler</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3"><strong>Öneri ID:</strong></div>
+                        <div class="col-md-9">#@Model.Id</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3"><strong>Üye:</strong></div>
+                        <div class="col-md-9">@Model.MemberName</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3"><strong>Hedef:</strong></div>
+                        <div class="col-md-9"><span class="badge bg-success">@Model.Goal</span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3"><strong>Model:</strong></div>
+                        <div class="col-md-9"><span class="badge bg-info">@(Model.ModelName ?? "gemini-1.5-flash")</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><strong>Oluşturulma:</strong></div>
+                        <div class="col-md-9">@Model.CreatedAt.ToString("dd MMMM yyyy HH:mm:ss")</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Giriş Bilgileri (Input)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="bg-light p-3 rounded">
+                        <pre style="margin: 0; white-space: pre-wrap; font-size: 0.9rem;">@Model.InputSummary</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">AI Çıktısı (Output)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="bg-light p-4 rounded" style="white-space: pre-line; line-height: 1.8;">
+                        @Model.OutputText
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a asp-action="Index" class="btn btn-primary">
+                    <i class="bi bi-list"></i> Tüm Loglara Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

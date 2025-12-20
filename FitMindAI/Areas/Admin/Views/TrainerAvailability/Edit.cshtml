@@ -1,0 +1,57 @@
+@model FitMindAI.Models.TrainerAvailability
+@{
+    ViewData["Title"] = "Müsaitlik Düzenle";
+}
+
+<div class="container mt-4">
+    <h2>Müsaitlik Düzenle</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+                
+                <div class="mb-3">
+                    <label asp-for="TrainerId" class="form-label"></label>
+                    <select asp-for="TrainerId" asp-items="ViewBag.Trainers" class="form-select">
+                        <option value="">-- Antrenör Seçin --</option>
+                    </select>
+                    <span asp-validation-for="TrainerId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DayOfWeek" class="form-label"></label>
+                    <select asp-for="DayOfWeek" asp-items="ViewBag.DaysOfWeek" class="form-select">
+                        <option value="">-- Gün Seçin --</option>
+                    </select>
+                    <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="StartTime" class="form-label"></label>
+                        <input asp-for="StartTime" type="time" class="form-control" />
+                        <span asp-validation-for="StartTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="EndTime" class="form-label"></label>
+                        <input asp-for="EndTime" type="time" class="form-control" />
+                        <span asp-validation-for="EndTime" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

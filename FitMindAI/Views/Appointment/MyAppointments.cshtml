@@ -1,0 +1,94 @@
+@model IEnumerable<FitMindAI.ViewModels.Appointment.AppointmentListItemViewModel>
+@{
+    ViewData["Title"] = "Randevularım";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Randevularım</h2>
+        <a asp-action="SelectTrainer" class="btn btn-primary">Yeni Randevu Al</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info">
+            Henüz randevunuz bulunmamaktadır.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Saat</th>
+                        <th>Antrenör</th>
+                        <th>Salon</th>
+                        <th>Servis</th>
+                        <th>Süre</th>
+                        <th>Fiyat</th>
+                        <th>Durum</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appointment in Model.OrderByDescending(a => a.StartDateTime))
+                    {
+                        var isPast = appointment.StartDateTime < DateTime.Now;
+                        
+                        <tr class="@(isPast ? "table-secondary" : "")">
+                            <td>@appointment.StartDateTime.ToString("dd.MM.yyyy")</td>
+                            <td>@appointment.StartDateTime.ToString("HH:mm") - @appointment.EndDateTime.ToString("HH:mm")</td>
+                            <td>@appointment.TrainerName</td>
+                            <td>@appointment.GymName</td>
+                            <td>@appointment.ServiceName</td>
+                            <td>@appointment.ServiceDuration dk</td>
+                            <td>@appointment.TotalPrice.ToString("C2")</td>
+                            <td>
+                                <span class="badge bg-@appointment.StatusBadgeClass">@appointment.StatusText</span>
+                            </td>
+                            <td>
+                                @if (appointment.CanBeCanceled)
+                                {
+                                    <form asp-action="Cancel" asp-route-id="@appointment.Id" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" 
+                                                class="btn btn-sm btn-danger" 
+                                                onclick="return confirm('Bu randevuyu iptal etmek istediğinizden emin misiniz?')">
+                                            İptal Et
+                                        </button>
+                                    </form>
+                                }
+                                else if (isPast)
+                                {
+                                    <span class="text-muted">Geçmiş</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

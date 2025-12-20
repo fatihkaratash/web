@@ -1,0 +1,208 @@
+@model FitMindAI.Models.Appointment
+@{
+    ViewData["Title"] = "Randevu Detayları";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Üye Bilgileri -->
+        <div class="card mb-3">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-circle"></i> Üye Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Ad Soyad</dt>
+                    <dd class="col-sm-8">@Model.Member.FullName</dd>
+
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">@Model.Member.UserId</dd>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Antrenör ve Salon Bilgileri -->
+        <div class="card mb-3">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-person-badge"></i> Antrenör ve Salon</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Antrenör</dt>
+                    <dd class="col-sm-8">@Model.Trainer.FullName</dd>
+
+                    <dt class="col-sm-4">Salon</dt>
+                    <dd class="col-sm-8">
+                        <strong>@(Model.Trainer?.Gym?.Name ?? "Belirtilmemiş")</strong><br />
+                        <small class="text-muted">@(Model.Trainer?.Gym?.Address ?? "-")</small>
+                    </dd>
+
+                    <dt class="col-sm-4">Salon Saatleri</dt>
+                    <dd class="col-sm-8">
+                        @(Model.Trainer?.Gym?.OpeningHour.ToString(@"hh\:mm") ?? "-") - 
+                        @(Model.Trainer?.Gym?.ClosingHour.ToString(@"hh\:mm") ?? "-")
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Hizmet Bilgileri -->
+        <div class="card mb-3">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="bi bi-list-check"></i> Hizmet Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Hizmet</dt>
+                    <dd class="col-sm-8">@Model.ServiceType.Name</dd>
+
+                    <dt class="col-sm-4">Açıklama</dt>
+                    <dd class="col-sm-8">@Model.ServiceType.Description</dd>
+
+                    <dt class="col-sm-4">Süre</dt>
+                    <dd class="col-sm-8">@Model.ServiceType.DurationInMinutes dakika</dd>
+
+                    <dt class="col-sm-4">Fiyat</dt>
+                    <dd class="col-sm-8"><strong>@Model.TotalPrice.ToString("C")</strong></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- Randevu Bilgileri -->
+        <div class="card mb-3">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Randevu Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-6">Tarih</dt>
+                    <dd class="col-sm-6">@Model.StartDateTime.ToString("dd.MM.yyyy")</dd>
+
+                    <dt class="col-sm-6">Başlangıç</dt>
+                    <dd class="col-sm-6"><strong>@Model.StartDateTime.ToString("HH:mm")</strong></dd>
+
+                    <dt class="col-sm-6">Bitiş</dt>
+                    <dd class="col-sm-6"><strong>@Model.EndDateTime.ToString("HH:mm")</strong></dd>
+
+                    <dt class="col-sm-6">Durum</dt>
+                    <dd class="col-sm-6">
+                        @switch (Model.Status)
+                        {
+                            case AppointmentStatus.Pending:
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-clock"></i> Onay Bekliyor
+                                </span>
+                                break;
+                            case AppointmentStatus.Approved:
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle"></i> Onaylandı
+                                </span>
+                                break;
+                            case AppointmentStatus.Rejected:
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-x-circle"></i> Reddedildi
+                                </span>
+                                break;
+                            case AppointmentStatus.Canceled:
+                                <span class="badge bg-secondary">
+                                    <i class="bi bi-slash-circle"></i> İptal Edildi
+                                </span>
+                                break;
+                            case AppointmentStatus.Completed:
+                                <span class="badge bg-info">
+                                    <i class="bi bi-check2-all"></i> Tamamlandı
+                                </span>
+                                break;
+                        }
+                    </dd>
+
+                    <dt class="col-sm-6">Oluşturulma</dt>
+                    <dd class="col-sm-6">
+                        <small>@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small>
+                    </dd>
+                </dl>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    <hr />
+                    <strong>Üye Notu:</strong>
+                    <p class="text-muted mb-0">@Model.Notes</p>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.AdminNote))
+                {
+                    <hr />
+                    <div class="alert alert-warning mb-0">
+                        <strong><i class="bi bi-info-circle"></i> Admin Notu:</strong><br />
+                        @Model.AdminNote
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- İşlemler -->
+        @if (Model.Status == AppointmentStatus.Pending)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">İşlemler</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Onayla -->
+                    <form method="post" asp-action="Approve" asp-route-id="@Model.Id" 
+                          onsubmit="return confirm('Bu randevuyu onaylamak istediğinize emin misiniz?');">
+                        <button type="submit" class="btn btn-success w-100 mb-2">
+                            <i class="bi bi-check-circle"></i> Randevuyu Onayla
+                        </button>
+                    </form>
+
+                    <!-- Reddet (Modal) -->
+                    <button type="button" class="btn btn-danger w-100" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#rejectModal">
+                        <i class="bi bi-x-circle"></i> Randevuyu Reddet
+                    </button>
+
+                    <!-- Reject Modal -->
+                    <div class="modal fade" id="rejectModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form method="post" asp-action="Reject" asp-route-id="@Model.Id">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Randevuyu Reddet</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Bu randevuyu reddetmek istediğinize emin misiniz?</p>
+                                        <div class="mb-3">
+                                            <label for="adminNote" class="form-label">Reddetme Nedeni (Opsiyonel)</label>
+                                            <textarea class="form-control" 
+                                                      id="adminNote" 
+                                                      name="adminNote" 
+                                                      rows="3" 
+                                                      placeholder="Örn: Antrenör o saatte müsait değil"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                                        <button type="submit" class="btn btn-danger">Reddet</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="@Url.Action("Index")" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Listeye Dön
+    </a>
+</div>
