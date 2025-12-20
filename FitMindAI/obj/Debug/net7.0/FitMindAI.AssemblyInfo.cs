@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FitMindAI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc68a8a0c5995df3dea53b071fa11ba5f26cc6de")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("FitMindAI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FitMindAI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

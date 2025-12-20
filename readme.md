@@ -32,7 +32,7 @@
 - **ORM**: Entity Framework Core 7.0
 - **Authentication**: ASP.NET Core Identity
 - **UI Framework**: Bootstrap 5.3
-- **AI Integration**: OpenAI API (GPT-3.5-turbo)
+- **AI Integration**: gemini
 - **Version Control**: Git & GitHub
 
 ## 📋 Gereksinimler

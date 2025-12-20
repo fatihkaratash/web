@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\web\\FitMindAI\\FitMindAI.csproj": {}
+    "C:\\Projects\\web\\fitmindai\\FitMindAI.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\web\\FitMindAI\\FitMindAI.csproj": {
+    "C:\\Projects\\web\\fitmindai\\FitMindAI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\web\\FitMindAI\\FitMindAI.csproj",
+        "projectUniqueName": "C:\\Projects\\web\\fitmindai\\FitMindAI.csproj",
         "projectName": "FitMindAI",
-        "projectPath": "C:\\Projects\\web\\FitMindAI\\FitMindAI.csproj",
+        "projectPath": "C:\\Projects\\web\\fitmindai\\FitMindAI.csproj",
         "packagesPath": "C:\\Users\\kzkst\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\web\\FitMindAI\\obj\\",
+        "outputPath": "C:\\Projects\\web\\fitmindai\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
