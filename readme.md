@@ -158,5 +158,4 @@ Sakarya Üniversitesi
 - GitHub: [@YasinDalgin](https://github.com/YasinDalgin)
 - Proje Repo: [github.com/YasinDalgin/web](https://github.com/YasinDalgin/web)
 
-
 **Son Güncelleme**: Kasım 2025
